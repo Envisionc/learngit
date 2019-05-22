@@ -1,33 +1,15 @@
 <template>
   <div class="home">
-    <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <img class="container-bg" src="../assets/warehouse_bg.jpg" alt="">
     <div class="container">
-      <div class="v-row">
+      <!-- <div class="v-row">
         <div class="v-td">
           <h6 class="safe-title">安防</h6>
           <div id="safe">
+            <img class="kuang-one" src="../assets/框002.png" alt="">
             <ul class="list-images">
-              <!-- <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
+              <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
                 <img class="_img" :src="item.url" :alt="'img-' + index" >
-              </li> -->
-              <li class="item-image">
-                <img class="_img" src="../assets/one.png" >
-              </li>
-              <li class="item-image">
-                <img class="_img" src="../assets/002.jpg" >
-              </li>
-              <li class="item-image">
-                <img class="_img" src="../assets/003.jpg" >
-              </li>
-              <li class="item-image">
-                <img class="_img" src="../assets/005.jpg" >
-              </li>
-              <li class="item-image">
-                <img class="_img" src="../assets/006.jpg" >
-              </li>
-              <li class="item-image">
-                <img class="_img" src="../assets/007.jpg" >
               </li>
             </ul>
           </div>
@@ -58,7 +40,6 @@
         <div class="v-td">
           <h6 class="safe-title">电子标签(案卷进出记录)</h6>
           <div class="v-item">
-            <!-- <light-timeline :items='items'></light-timeline> -->
             <ul class="time-line-container">
               <li class="time-line-item" v-for="(item,index) in items" :key="index">
                 <div class="time-item-tag">{{ item.tag }}</div>
@@ -75,13 +56,11 @@
           <h6 class="safe-title">档案数据统计</h6>
           <div class="v-item">
             <div class="archival-data" id="archival" ></div>
-            <!-- <light-timeline :items='items'></light-timeline> -->
           </div>
         </div>
         <div class="v-td">
           <h6 class="safe-title">实时消息</h6>
           <div class="v-item">
-            <!-- <light-timeline :items='items'></light-timeline> -->
             <ul class="time-line-container">
               <li class="time-line-item" v-for="(item,index) in messageData" :key="index">
                 <div class="time-item-tag">{{ item.tag }}</div>
@@ -133,6 +112,112 @@
           <h6 class="safe-title">档案利用统计</h6>
           <div class="v-item"></div>
         </div>
+      </div> -->
+      <div class="left">
+        <div id="safe" class="item">
+          <img class="kuang-one" src="../assets/框002.png" alt="">
+          <h6 class="item-title">安防</h6>
+          <ul class="item-images clearfix">
+            <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
+              <img class="_img" :src="item.url" :alt="'img-' + index" >
+            </li>
+          </ul>
+        </div>
+        <div class="item">
+          <img class="kuang-one" src="../assets/框002.png" alt="">
+          <h6 class="item-title">电子标签进出记录</h6>
+          <ul class="time-line-container">
+            <li class="time-line-item" v-for="(item,index) in items" :key="index">
+              <div class="time-item-tag">{{ item.tag }}</div>
+              <div class="time-item-symbol">
+                <div v-if="item.status == 0" class="time-item-icon in"></div>
+                <div v-else class="time-item-icon out"></div>
+              </div>
+              <div class="time-item-content">{{ item.content }}</div>
+            </li>
+          </ul>
+        </div>
+        <div class="item">
+          <img class="kuang-one" src="../assets/框002.png" alt="">
+          <h6 class="item-title">库房档案数量统计</h6>
+          <div class="archival-box">
+            <div id="archival" class="archival" style="width:300px; height: 180px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="middle">
+        <div class="middle-show">
+          <img class="middle-bg" src="../assets/kuang-middle.png" alt="">
+        </div>
+        <div class="middle-item">
+          <div class="tempt-box-one">
+            <div id="pie1" style="width: 300px; height: 300px;"></div>
+            <p class="room-title">房间一</p>
+          </div>
+          <div class="tempt-box-one">
+            <div id="pie2" style="width: 300px; height: 300px;"></div>
+            <p class="room-title">房间二</p>
+          </div>
+        </div>
+      </div>
+      <div class="right">
+        <div class="item">
+          <img class="kuang-one" src="../assets/框002.png" alt="">
+          <h6 class="item-title">实时监控</h6>
+          <div class="video-box">
+            <video class="my-video" controls="controls" loop="loop">
+              <source src="../assets/test02.mp4" type="video/mp4" >
+            </video>
+          </div>
+        </div>
+        <div class="item">
+          <img class="kuang-one" src="../assets/框002.png" alt="">
+          <h6 class="item-title">实时消息</h6>
+          <ul class="time-line-container">
+            <li class="time-line-item" v-for="(item,index) in messageData" :key="index">
+              <div class="time-item-tag">{{ item.tag }}</div>
+              <div class="time-item-symbol">
+                <div v-if="item.status == 0" class="time-item-icon warning"></div>
+                <div v-else class="time-item-icon default"></div>
+              </div>
+              <div class="time-item-content">{{ item.content }}</div>
+            </li>
+          </ul>
+        </div>
+        <div class="item">
+          <img class="kuang-one" src="../assets/框002.png" alt="">
+          <h6 class="item-title">消防警告</h6>
+          <div class="table-item">
+            <div class="v-table">
+              <ul class="table-th">
+                <li class="table-th-item">时间</li>
+                <li class="table-th-item">设备</li>
+                <li class="table-th-item">状态</li>
+                <li class="table-th-item">位置</li>
+              </ul>
+              <div class="table-body">
+                <div class="table-body-item">
+                  <div class="table-con" v-for="(item,index) in warningData" :key="index">
+                    <ul class="item-ul even" v-if="index % 2 == 0">
+                      <li class="item-li">{{ item.time }}</li>
+                      <li class="item-li">{{ item.equipmentNo }}</li>
+                      <li class="item-li" v-if="item.status == 0">正常</li>
+                      <li class="item-li" v-else>不正常</li>
+                      <li class="item-li">{{ item.localtion }}</li>
+                    </ul>
+                    <ul class="item-ul odd" v-else>
+                      <li class="item-li">{{ item.time }}</li>
+                      <li class="item-li">{{ item.equipmentNo }}</li>
+                      <li class="item-li" v-if="item.status == 0">正常</li>
+                      <li class="item-li" v-else>不正常</li>
+                      <li class="item-li">{{ item.localtion }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -163,22 +248,22 @@ export default {
       publicPath: process.env.BASE_URL,
       imageUrls: [
         {
-          url: '../assets/one.png',
+          url: require('../assets/one.png'),
         },
         {
-          url: '../assets/one.png',
+          url: require('../assets/002.jpg'),
         },
         {
-          url: '../assets/one.png',
+          url: require('../assets/003.jpg'),
         },
         {
-          url: '../assets/one.png',
+          url: require('../assets/005.jpg'),
         },
         {
-          url: '../assets/one.png',
+          url: require('../assets/006.jpg'),
         },
         {
-          url: '../assets/one.png',
+          url: require('../assets/007.jpg'),
         },
         // '../assets/002.jpg',
         // '../assets/003.jpg',
@@ -218,11 +303,6 @@ export default {
           tag: '2019-02-11 12:30',
           content: '库房安防一步到位',
           status: 1
-        },
-        {
-          tag: '2019-02-09 12:30',
-          content: '湿度警报',
-          status: 0
         }
       ],
       warningData: [
@@ -284,15 +364,16 @@ export default {
       let archival = echarts.init(document.getElementById('archival'))
       // 绘制图表
       archival.setOption({
-        title: { text: '库房档案数量统计' },
+        // title: { text: '库房档案数量统计' },
         tooltip: {},
+        barWidth : 20,
         xAxis: {
-          data: ["档案1", "档案2", "档案3", "档案4", "档案5", "档案6"],
+          data: ["档1", "档2", "档3", "档4", "档5", "档6"],
           axisLabel: {
             show: true,
               textStyle: {
                 color: '#c3dbff',  //更改坐标轴文字颜色
-                fontSize : 14      //更改坐标轴文字大小
+                fontSize : 12      //更改坐标轴文字大小
               }
           },
           axisTick: {
@@ -314,7 +395,7 @@ export default {
           }
         },
         series: [{
-          color: ['#3F69B6'],
+          color: ['#1a68ff'],
           name: '数量',
           type: 'bar',
           data: [5, 20, 36, 10, 10, 20]
@@ -416,166 +497,358 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.home
+  height calc( 100% - 80px )
+  padding-top 74px
+.container-bg
+  width 100%
+  height calc( 100%  - 80px )
+  display block
+  position absolute
+  top 80px
+  left 0
+  z-index -1
 .container
-  min-width 1920px
+  height 100%
+  display flex
+  text-align center
   overflow hidden
-  .v-row
-    display flex
-    margin-top 30px
-    .v-td 
-      flex 1
-      padding 0 40px
-      &:nth-of-type(2)
-        padding: 0 
-      &:nth-of-type(3) 
-        margin-right 0
-      .safe-title
-        font-size 16px
-        margin-bottom 20px
-      #safe
-        height 400px
-        padding 20px
-        box-sizing border-box
-        border 2px solid #263fa3
-        border-radius 4px
-        display flex
-        justify-content center
-        align-items center
-        .list-images
-          // width 100%
-          // height 100%
-          
-          box-sizing border-box
-          .item-image
-            width 150px
-            height 150px
-            float left
-            margin-right 15px
-            margin-bottom 10px
-            ._img
-              width 150px
-              height 150px
-              display block
-      .video-box
-        height 300px
-        margin-top 100px
-        .my-video
-          width 100%
-          height 100%
-          object-fit fill;
-      .v-item
+  .left, .right
+    width 26.14%
+    padding-left 20px
+    margin-top 34px
+    .item
+      width 100%
+      height 250px
+      box-sizing border-box
+      position relative
+      .kuang-one
         width 100%
-        height 400px
-        display flex
-        justify-content center
-        align-items center
-        border-radius 4px
+        height 100%
+        display block
+        position absolute
+        top 0
+        left 0
+      .item-title
+        position absolute
+        top 10px
+        left 50%
+        transform translateX(-50%)
+      .item-images
+        padding-top 40px
+        padding-left 30px
         box-sizing border-box
-        border 2px solid #263fa3
-        .tempt-box-one
-          position relative
-          .room-title
-            width 100%
-            height 24px
-            position absolute
-            left 0
-            bottom 30px
-            text-align center
-            font-size 14px
-            color #ffffff
-        .time-line-container
-          color: #1DD8FE;
-          font-size: 16px;
-          font-family: "Helvetica Neue For Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-          box-sizing: border-box;
-          position: relative;
-          list-style: none;
-          margin: 0.5rem;
-          padding-left: 6rem;
-          &::after
-            position: absolute;
-            content: "";
-            left: 5rem;
-            top: 0;
-            width: 2px;
-            height: 100%;
-            background-color: #fe4f16
-          .time-line-item
-            padding: 1rem
-            position: relative
-            .time-item-tag
-              position: absolute
-              left: -10rem
-              // width: 65px
-              text-align: center
-              color: #5EBCF7
-              font-size: 14px
-            .time-item-symbol
+        .item-image
+          width 60px
+          height 60px
+          float left
+          margin-right 15px
+          margin-bottom 20px
+          ._img
+            width 60px
+            height 60px
+            display block
+      .time-line-container
+        color: #1DD8FE;
+        font-size: 14px;
+        box-sizing: border-box;
+        position: relative;
+        top 36px
+        list-style: none;
+        // margin: 0.5rem;
+        padding-left: 53%;
+        &::after
+          position: absolute;
+          content: "";
+          left: 48.5%;
+          top: 0;
+          width: 2px;
+          height: 100%;
+          background-color: #fe4f16
+        .time-line-item
+          padding: 1rem
+          text-align left
+          position: relative
+          .time-item-tag
+            position: absolute
+            left: -10rem
+            // width: 65px
+            text-align: center
+            color: #5EBCF7
+            font-size: 14px
+          .time-item-symbol
+            box-sizing: border-box
+            position: absolute
+            left: -1rem
+            z-index: 1
+            background: white
+            .time-item-icon
               box-sizing: border-box
               position: absolute
-              left: -1rem
-              z-index: 1
+              margin-left: -11px
+              width: 24px
+              height: 24px
+              border-radius: 12px
+              border: 2px solid #fe4f16
+            .default
+              background: #51F7D6
+            .warning
+              background red
+            .out
               background: white
-              .time-item-icon
-                box-sizing: border-box
-                position: absolute
-                margin-left: -11px
-                width: 24px
-                height: 24px
-                border-radius: 12px
-                border: 2px solid #fe4f16
-              .default
-                background: #51F7D6
-              .warning
-                background red
-              .out
-                background: white
-              .in
-                background: black
-            .time-item-content
-              white-space: pre-line
+            .in
+              background: black
+          .time-item-content
+            white-space: pre-line
+            overflow hidden
+            white-space nowrap
+            text-overflow ellipsis
+      .archival-box
+        padding-top 40px
+        padding-left 30px
+        box-sizing border-box
+  .middle
+    flex 1
+    margin-top 40px
+    position relative
+    box-sizing border-box
+    .middle-show
+      width 680px
+      .middle-bg
+        width 100%
+    .middle-item
+      // position absolute
+      // bottom 0
+      // left 0
+      height 300px
+      display flex
 
-        .archival-data
-          width: 100%
-          height 100%
-        .v-table
-          width 400px
-          height 300px
-          border 1px solid #0c3548
+      border 1px solid #043778
+      box-sizing border-box
+  .right
+    padding-left 0
+    padding-right 20px
+    .video-box
+      width 330px
+      height 180px
+      padding-top 40px
+      padding-left 30px
+      box-sizing border-box
+      .my-video
+        width 100%
+        height 100%
+        object-fit fill;
+    .table-item
+      padding-top 40px
+      padding-left 30px
+      box-sizing border-box
+      .v-table
+        width 400px
+        height 300px
+        border 1px solid #0c3548
+        box-sizing border-box
+        font-size 14px
+        .table-th
+          height 40px
+          display flex
+          justify-content flex-start
+          align-items center
+          color #2c91a9
+          .table-th-item
+            flex 1
+        .table-body
+          height 260px
+          overflow auto
           box-sizing border-box
-          .table-th
+          .table-body-item
             height 40px
-            display flex
-            justify-content flex-start
-            align-items center
-            color #2c91a9
-            .table-th-item
-              flex 1
-          .table-body
-            height 260px
-            overflow auto
+            border-bottom 1px solid #0c3548
             box-sizing border-box
-            .table-body-item
+            .table-con
               height 40px
-              border-bottom 1px solid #0c3548
-              box-sizing border-box
-              .table-con
-                height 40px
-                .item-ul
-                  height 100%
-                  display flex
-                  justify-content flex-start
-                  align-items center
-                  .item-li
-                    color #2c91a9
-                    overflow hidden
-                    white-space nowrap
-                    text-overflow ellipsis
-                    flex 1
-                .even
-                  background rgba(3,42,68,.5)
-                .odd
-                  background rgba(3,42,68,1)
+              .item-ul
+                height 100%
+                display flex
+                justify-content flex-start
+                align-items center
+                .item-li
+                  color #2c91a9
+                  overflow hidden
+                  white-space nowrap
+                  text-overflow ellipsis
+                  flex 1
+              .even
+                background rgba(3,42,68,.5)
+              .odd
+                background rgba(3,42,68,1)
+  // .v-row
+  //   display flex
+  //   margin-top 30px
+  //   .v-td 
+  //     // flex 1
+  //     padding 0 20px
+  //     &:nth-of-type(2)
+  //       padding: 0 
+  //     &:nth-of-type(3) 
+  //       margin-right 0
+  //     .safe-title
+  //       font-size 16px
+  //       margin-bottom 20px
+  //     #safe
+  //       width 360px
+  //       height 220px
+  //       position relative
+  //       // padding 20px
+  //       box-sizing border-box
+  //       // border 2px solid #263fa3
+  //       // border-radius 4px
+  //       display flex
+  //       justify-content center
+  //       align-items center
+  //       // background url('../assets/框002.png') no-repeat center
+  //       // background-size contain
+  //       .kuang-one
+  //         width 100%
+  //         height 100%
+  //         display block
+  //         position absolute
+  //         top 0
+  //         left 0
+  //       .list-images
+  //         // width 100%
+  //         // height 100%
+          
+  //         box-sizing border-box
+  //         .item-image
+  //           width 80px
+  //           height 80px
+  //           float left
+  //           margin-right 15px
+  //           margin-bottom 10px
+  //           ._img
+  //             width 80px
+  //             height 80px
+  //             display block
+  //     .video-box
+  //       height 300px
+  //       margin-top 100px
+  //       .my-video
+  //         width 100%
+  //         height 100%
+  //         object-fit fill;
+  //     .v-item
+  //       width 100%
+  //       height 400px
+  //       display flex
+  //       justify-content center
+  //       align-items center
+  //       border-radius 4px
+  //       box-sizing border-box
+  //       border 2px solid #263fa3
+  //       .tempt-box-one
+  //         position relative
+  //         .room-title
+  //           width 100%
+  //           height 24px
+  //           position absolute
+  //           left 0
+  //           bottom 30px
+  //           text-align center
+  //           font-size 14px
+  //           color #ffffff
+  //       .time-line-container
+  //         color: #1DD8FE;
+  //         font-size: 16px;
+  //         font-family: "Helvetica Neue For Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  //         box-sizing: border-box;
+  //         position: relative;
+  //         list-style: none;
+  //         margin: 0.5rem;
+  //         padding-left: 6rem;
+  //         &::after
+  //           position: absolute;
+  //           content: "";
+  //           left: 5rem;
+  //           top: 0;
+  //           width: 2px;
+  //           height: 100%;
+  //           background-color: #fe4f16
+  //         .time-line-item
+  //           padding: 1rem
+  //           position: relative
+  //           .time-item-tag
+  //             position: absolute
+  //             left: -10rem
+  //             // width: 65px
+  //             text-align: center
+  //             color: #5EBCF7
+  //             font-size: 14px
+  //           .time-item-symbol
+  //             box-sizing: border-box
+  //             position: absolute
+  //             left: -1rem
+  //             z-index: 1
+  //             background: white
+  //             .time-item-icon
+  //               box-sizing: border-box
+  //               position: absolute
+  //               margin-left: -11px
+  //               width: 24px
+  //               height: 24px
+  //               border-radius: 12px
+  //               border: 2px solid #fe4f16
+  //             .default
+  //               background: #51F7D6
+  //             .warning
+  //               background red
+  //             .out
+  //               background: white
+  //             .in
+  //               background: black
+  //           .time-item-content
+  //             white-space: pre-line
+
+  //       .archival-data
+  //         width: 100%
+  //         height 100%
+  //       .v-table
+  //         width 400px
+  //         height 300px
+  //         border 1px solid #0c3548
+  //         box-sizing border-box
+  //         .table-th
+  //           height 40px
+  //           display flex
+  //           justify-content flex-start
+  //           align-items center
+  //           color #2c91a9
+  //           .table-th-item
+  //             flex 1
+  //         .table-body
+  //           height 260px
+  //           overflow auto
+  //           box-sizing border-box
+  //           .table-body-item
+  //             height 40px
+  //             border-bottom 1px solid #0c3548
+  //             box-sizing border-box
+  //             .table-con
+  //               height 40px
+  //               .item-ul
+  //                 height 100%
+  //                 display flex
+  //                 justify-content flex-start
+  //                 align-items center
+  //                 .item-li
+  //                   color #2c91a9
+  //                   overflow hidden
+  //                   white-space nowrap
+  //                   text-overflow ellipsis
+  //                   flex 1
+  //               .even
+  //                 background rgba(3,42,68,.5)
+  //               .odd
+  //                 background rgba(3,42,68,1)
 
 </style>
 
