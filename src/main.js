@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import LightTimeline from '../node_modules/vue-light-timeline';
 import vuetable from '../node_modules/vuetable-2'
+// import Progress from '../node_modules/vue-multiple-progress'
 
 Vue.use(LightTimeline)
 Vue.use(vuetable)

@@ -2,129 +2,44 @@
   <div class="home">
     <img class="container-bg" src="../assets/warehouse_bg.jpg" alt="">
     <div class="container">
-      <!-- <div class="v-row">
-        <div class="v-td">
-          <h6 class="safe-title">安防</h6>
-          <div id="safe">
-            <img class="kuang-one" src="../assets/框002.png" alt="">
-            <ul class="list-images">
-              <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
-                <img class="_img" :src="item.url" :alt="'img-' + index" >
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="v-td">
-          <h6 class="safe-title">实时监控</h6>
-          <div class="video-box">
-            <video class="my-video" controls="controls" loop="loop">
-              <source src="../assets/test02.mp4" type="video/mp4" >
-            </video>
-          </div>
-        </div>
-        <div class="v-td">
-          <h6 class="safe-title">温度控制</h6>
-          <div class="v-item">
-            <div class="tempt-box-one">
-              <div id="pie1" style="width: 300px; height: 300px;"></div>
-              <p class="room-title">房间一</p>
-            </div>
-            <div class="tempt-box-one">
-              <div id="pie2" style="width: 300px; height: 300px;"></div>
-              <p class="room-title">房间二</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="v-row">
-        <div class="v-td">
-          <h6 class="safe-title">电子标签(案卷进出记录)</h6>
-          <div class="v-item">
-            <ul class="time-line-container">
-              <li class="time-line-item" v-for="(item,index) in items" :key="index">
-                <div class="time-item-tag">{{ item.tag }}</div>
-                <div class="time-item-symbol">
-                  <div v-if="item.status == 0" class="time-item-icon in"></div>
-                  <div v-else class="time-item-icon out"></div>
-                </div>
-                <div class="time-item-content">{{ item.content }}</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="v-td">
-          <h6 class="safe-title">档案数据统计</h6>
-          <div class="v-item">
-            <div class="archival-data" id="archival" ></div>
-          </div>
-        </div>
-        <div class="v-td">
-          <h6 class="safe-title">实时消息</h6>
-          <div class="v-item">
-            <ul class="time-line-container">
-              <li class="time-line-item" v-for="(item,index) in messageData" :key="index">
-                <div class="time-item-tag">{{ item.tag }}</div>
-                <div class="time-item-symbol">
-                  <div v-if="item.status == 0" class="time-item-icon warning"></div>
-                  <div v-else class="time-item-icon default"></div>
-                </div>
-                <div class="time-item-content">{{ item.content }}</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="v-row">
-        <div class="v-td">
-          <h6 class="safe-title">消防</h6>
-          <div class="v-item">
-            <div class="v-table">
-              <ul class="table-th">
-                <li class="table-th-item">时间</li>
-                <li class="table-th-item">设备</li>
-                <li class="table-th-item">状态</li>
-                <li class="table-th-item">位置</li>
-              </ul>
-              <div class="table-body">
-                <div class="table-body-item">
-                  <div class="table-con" v-for="(item,index) in warningData" :key="index">
-                    <ul class="item-ul even" v-if="index % 2 == 0">
-                      <li class="item-li">{{ item.time }}</li>
-                      <li class="item-li">{{ item.equipmentNo }}</li>
-                      <li class="item-li" v-if="item.status == 0">正常</li>
-                      <li class="item-li" v-else>不正常</li>
-                      <li class="item-li">{{ item.localtion }}</li>
-                    </ul>
-                    <ul class="item-ul odd" v-else>
-                      <li class="item-li">{{ item.time }}</li>
-                      <li class="item-li">{{ item.equipmentNo }}</li>
-                      <li class="item-li" v-if="item.status == 0">正常</li>
-                      <li class="item-li" v-else>不正常</li>
-                      <li class="item-li">{{ item.localtion }}</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="v-td">
-          <h6 class="safe-title">档案利用统计</h6>
-          <div class="v-item"></div>
-        </div>
-      </div> -->
       <div class="left">
-        <div id="safe" class="item">
-          <img class="kuang-one" src="../assets/框002.png" alt="">
-          <h6 class="item-title">安防</h6>
-          <ul class="item-images clearfix">
+        <div id="safe" class="item have-bg">
+          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+          <!-- <h6 class="item-title">安防</h6> -->
+          <!-- <ul class="item-images clearfix">
             <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
               <img class="_img" :src="item.url" :alt="'img-' + index" >
             </li>
-          </ul>
+          </ul> -->
+          <h6 class="item-title">设备状态</h6>
+          <div class="circle-chart">
+            <div class="donut-chart">
+              <div id="section-one" class="clip">
+                <div class="p-item"></div>
+              </div>
+              <div id="section-two" class="clip">
+                <div class="p-item"></div>
+              </div>
+              <div id="section-three" ref="section3" class="clip">
+                <div class="p-item" ref="section3Item"></div>
+              </div>
+              <div class="center">
+                <a class="percent-box">
+                  <span class="percent" ref="percent">0</span><small>%</small>
+                </a>
+                <p>已完成</p>
+              </div>
+            </div>
+            <div class="tab-list">
+              <div class="tab-item">摄像头</div>
+              <div class="tab-item">门</div>
+              <div class="tab-item">灯</div>
+              <div class="tab-item">空调</div>
+            </div>
+          </div>
         </div>
-        <div class="item">
-          <img class="kuang-one" src="../assets/框002.png" alt="">
+        <div class="item have-bg">
+          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
           <h6 class="item-title">电子标签进出记录</h6>
           <ul class="time-line-container">
             <li class="time-line-item" v-for="(item,index) in items" :key="index">
@@ -137,8 +52,8 @@
             </li>
           </ul>
         </div>
-        <div class="item">
-          <img class="kuang-one" src="../assets/框002.png" alt="">
+        <div class="item have-bg">
+          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
           <h6 class="item-title">库房档案数量统计</h6>
           <div class="archival-box">
             <div id="archival" class="archival" style="width:300px; height: 180px"></div>
@@ -161,8 +76,8 @@
         </div>
       </div>
       <div class="right">
-        <div class="item">
-          <img class="kuang-one" src="../assets/框002.png" alt="">
+        <div class="item have-bg">
+          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
           <h6 class="item-title">实时监控</h6>
           <div class="video-box">
             <video class="my-video" controls="controls" loop="loop">
@@ -170,10 +85,15 @@
             </video>
           </div>
         </div>
-        <div class="item">
-          <img class="kuang-one" src="../assets/框002.png" alt="">
-          <h6 class="item-title">实时消息</h6>
-          <ul class="time-line-container">
+        <div class="item have-bg">
+          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+          <h6 class="item-title">安防监控</h6>
+          <ul class="item-images clearfix">
+            <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
+              <img class="_img" :src="item.url" :alt="'img-' + index" >
+            </li>
+          </ul>
+          <!-- <ul class="time-line-container">
             <li class="time-line-item" v-for="(item,index) in messageData" :key="index">
               <div class="time-item-tag">{{ item.tag }}</div>
               <div class="time-item-symbol">
@@ -182,11 +102,11 @@
               </div>
               <div class="time-item-content">{{ item.content }}</div>
             </li>
-          </ul>
+          </ul> -->
         </div>
-        <div class="item">
-          <img class="kuang-one" src="../assets/框002.png" alt="">
-          <h6 class="item-title">消防警告</h6>
+        <div class="item have-bg">
+          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+          <h6 class="item-title">消防实时消息</h6>
           <div class="table-item">
             <div class="v-table">
               <ul class="table-th">
@@ -357,6 +277,7 @@ export default {
     this.drawPie(pie1)
     this.drawPie(pie2)
     this.drawLine()
+    this.updateDonut(35) // 初始化百分比
   },
   methods: {
     drawLine() {
@@ -492,6 +413,28 @@ export default {
         option.series[0].data[0].value = (50 - (Math.random()*50)).toFixed(1);
         obj.setOption(option)
       },2000);
+    },
+    updateDonut (percent) {
+      // 圆形进度
+      let offset = 0
+      let $el = this.$refs.section3
+      console.log(this.$refs)
+      let $elItem = this.$refs.section3Item
+      let $txt = this.$refs.percent
+      if (percent < 50) {
+        offset = (360 / 100) * percent
+        $el.style.webkitTransform = $el.style.msTransform = $el.style.MozTransform = 'rotate(' + offset + 'deg)'
+        $elItem.style.webkitTransform = $elItem.style.msTransform = $elItem.style.MozTransform = 'rotate(' + (180 - offset) + 'deg)'
+        $elItem.style.transtion = '1s'
+        $elItem.style.backgroundColor = '#04283c'
+      } else {
+        offset = ((360 / 100) * percent) - 180
+        $el.style.webkitTransform = $elItem.style.msTransform = $el.style.MozTransform = 'rotate(180deg)'
+        $elItem.style.webkitTransform = $elItem.style.msTransform = $elItem.style.MozTransform = 'rotate(' + offset + 'deg)'
+        $elItem.style.transtion = '1s'
+        $elItem.style.backgroundColor = '#09effb'
+      }
+      $txt.innerHTML = percent
     }
   }
 }
@@ -534,6 +477,88 @@ export default {
         top 10px
         left 50%
         transform translateX(-50%)
+      .circle-chart
+        padding: 40px
+        padding-top 60px
+        display flex
+        // margin: 0 85px 0 45px
+        .donut-chart
+          z-index 2
+          position: relative
+          width: 140px
+          height: 140px
+          // margin: 55px auto
+          border-radius: 100
+          .center
+            background: #002644
+            border-radius: 50%
+            width: 70%
+            height: 70%
+            left: 15%
+            top: 15%
+            position: absolute
+            a
+              color: #2ACBF8
+              display: block
+              font-size: 24px
+              font-weight: 600
+              left: 50%
+              position: absolute
+              top: 40%
+              transform: translate(-50%,-50%)
+              small
+                font-size: 14px;
+            p
+              font-size: 14px;
+              color: #9B9B9B;
+              left: 50%;
+              position: absolute;
+              bottom: 20%;
+              transform: translate(-50%,-50%);
+          .clip
+            border-radius: 50%;
+            clip: rect(0px 140px 140px 70px);
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            .p-item
+              border-radius: 50%;
+              clip: rect(0px 70px 140px 0px);
+              height: 100%;
+              position: absolute;
+              width: 100%;
+          #section-one
+            transform: rotate(0deg);
+            .p-item
+              background-color: #09effb;
+              transform: rotate(180deg);
+              transition 1s
+          #section-two
+            transform: rotate(180deg);
+            .p-item
+              background-color: #04283c;
+              transform: rotate(180deg);
+              transition 1s
+        .tab-list
+          position relative
+          top 10px
+          left -40px
+          .tab-item
+            width 100px
+            height 30px
+            line-height 30px
+            text-align right
+            font-size 12px
+            color #196576
+            border 1px solid #00343f
+            // border 1px solid #359093
+            box-sizing border-box
+          .tab-item:nth-of-type(1),
+          .tab-item:nth-of-type(4)
+            padding-right 10px
+          .tab-item:nth-of-type(2),
+          .tab-item:nth-of-type(3)
+            padding-right 34px
       .item-images
         padding-top 40px
         padding-left 30px
@@ -607,6 +632,9 @@ export default {
         padding-top 40px
         padding-left 30px
         box-sizing border-box
+    .have-bg
+      background url('../assets/框002.png') no-repeat center
+      background-size 100% 100%
   .middle
     flex 1
     margin-top 40px
@@ -628,6 +656,9 @@ export default {
   .right
     padding-left 0
     padding-right 20px
+    .have-bg
+      background url('../assets/框002.png') no-repeat center
+      background-size 100% 100%
     .video-box
       width 330px
       height 180px
@@ -639,12 +670,14 @@ export default {
         height 100%
         object-fit fill;
     .table-item
-      padding-top 40px
-      padding-left 30px
+      // padding-top 40px
+      // padding-left 30px
+      height 100%
+      padding 40px 30px 30px 30px
       box-sizing border-box
       .v-table
-        width 400px
-        height 300px
+        width 100%
+        height 100%
         border 1px solid #0c3548
         box-sizing border-box
         font-size 14px
@@ -657,7 +690,7 @@ export default {
           .table-th-item
             flex 1
         .table-body
-          height 260px
+          height 140px
           overflow auto
           box-sizing border-box
           .table-body-item
@@ -851,4 +884,3 @@ export default {
   //                 background rgba(3,42,68,1)
 
 </style>
-

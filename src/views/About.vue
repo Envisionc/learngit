@@ -1,5 +1,91 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <div class="circleProgress_wrapper">
+      <div class="wrapper right">
+          <div class="circleProgress rightcircle"></div>
+      </div>
+      <div class="wrapper left">
+          <div class="circleProgress leftcircle"></div>
+      </div>
+    </div>
   </div>
 </template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style scoped>
+.circleProgress_wrapper{
+  width: 200px;
+  height: 200px;
+  margin: 50px auto;
+  position: relative;
+  border:1px solid #ddd;
+}
+.wrapper{
+  width: 100px;
+  height: 200px;
+  position: absolute;
+  top:0;
+  overflow: hidden;
+}
+.right{
+    right:0;
+}
+.left{
+    left:0;
+}
+.circleProgress{
+    width: 160px;
+    height: 160px;
+    border:20px solid transparent;
+    border-radius: 50%;
+    position: absolute;
+    top:0;
+}
+.rightcircle{
+    border-top:20px solid green;
+    border-right:20px solid green;
+    right:0;
+    -webkit-animation: circleProgressLoad_right 5s linear infinite;
+}
+.circleProgress{
+    transform: rotate(45deg);
+}
+.leftcircle{
+    border-bottom:20px solid green;
+    border-left:20px solid green;
+    left:0;
+    -webkit-animation: circleProgressLoad_left 5s linear infinite;
+}
+
+.circleProgress{
+            /* width: 160px;
+            height: 160px;
+            border:20px solid transparent;
+            border-radius: 50%;
+            position: absolute;
+            top:0; */
+            transform: rotate(-135deg);
+        }
+        @-webkit-keyframes circleProgressLoad_right{
+            0%{
+                -webkit-transform: rotate(-135deg);
+            }
+            50%,100%{
+                -webkit-transform: rotate(45deg);
+            }
+        }
+        @-webkit-keyframes circleProgressLoad_left{
+            0%,50%{
+                -webkit-transform: rotate(-135deg);
+            }
+            100%{
+                -webkit-transform: rotate(45deg);
+            }
+        }
+</style>
+
