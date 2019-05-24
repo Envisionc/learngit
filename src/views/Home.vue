@@ -14,7 +14,7 @@
           <h6 class="item-title">设备状态</h6>
           <div class="circle-chart">
             <div class="donut-chart">
-              <div id="section-one" class="clip">
+              <!-- <div id="section-one" class="clip">
                 <div class="p-item"></div>
               </div>
               <div id="section-two" class="clip">
@@ -28,6 +28,19 @@
                   <span class="percent" ref="percent">0</span><small>%</small>
                 </a>
                 <p>已完成</p>
+              </div> -->
+              <div class="progress-circle">
+                <svg :width="radiusW" :height="radiusH" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">  
+                    <!-- width/height表示svg的宽高,viewBox表示根据svg的宽高拉出来的大小 -->  
+                    <circle class="progress-background" r="50" cx="50" cy="50" stroke-width="4.8" fill="transparent" />  
+                    <!-- r表示半径，cx 和 cy 属性定义圆点的 x 和 y 坐标 fill表示背景色 -->  
+                    <circle stroke-linecap="round" class="progress-bar" r="50" cx="50" cy="50" stroke-width="4.8" fill="transparent" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset" style="transition: stroke-dashoffset 0.6s ease 0s"/>  
+                </svg>
+                <div class="equipment-info">
+                    <div class="enable-rate-text">启用率</div>
+                    <div class="rate"><span>{{ rate }}</span><span>%</span></div>
+                    <div class="equipment-sum">总数: {{ equiqSum }}</div>
+                </div>
               </div>
             </div>
             <div class="tab-list">
@@ -268,7 +281,13 @@ export default {
           status: 0,
           localtion: '东一房间三'
         }
-      ]
+      ],
+      dashArray: Math.PI * 100,
+      radiusW: 120,
+      radiusH: 140,
+      percent: 1,
+      rate: 0,
+      equiqSum: 58
     }
   },
   mounted() {
@@ -277,7 +296,17 @@ export default {
     this.drawPie(pie1)
     this.drawPie(pie2)
     this.drawLine()
-    this.updateDonut(35) // 初始化百分比
+    // this.updateDonut(35) // 初始化百分比
+    let _this = this
+    setInterval(() => {
+        _this.percent = Math.random()
+        _this.rate = (_this.percent * 100).toFixed(2)
+    },1000)
+  },
+  computed: {
+    dashOffset() {
+        return (1 - this.percent) * this.dashArray
+    }
   },
   methods: {
     drawLine() {
@@ -489,6 +518,41 @@ export default {
           height: 140px
           // margin: 55px auto
           border-radius: 100
+          .progress-circle
+            width 100%
+            height 100%
+            background #002644
+            border-radius 50%  
+            border 1px solid #3dd4d3
+            box-sizing border-box
+            position relative  
+            circle  
+              stroke-width 8px  
+              // stroke-width表示环形的宽度  
+              transform-origin center  
+              // 中心旋转  
+              &.progress-background  
+                  transform scale(0.9)  
+                  stroke #04283c 
+              &.progress-bar  
+                  transform scale(0.9) rotate(-90deg)  
+                  stroke #3dd4d3  
+            .equipment-info
+              position absolute
+              top 50%
+              left 50%
+              transform translate(-50%,-50%)
+              color #107194
+              font-size 12px
+              .rate
+                height 40px
+                line-height 40px
+                font-size 18px
+                font-weight 500
+                color #10eceb
+                span:nth-of-type(2)
+                  color #107194
+                  font-size 12px
           .center
             background: #002644
             border-radius: 50%
