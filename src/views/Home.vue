@@ -44,6 +44,9 @@
           <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
           <h6 class="item-title">库房档案数量统计</h6>
           <div class="archival-box">
+            <!-- 柱状图 -->
+            <!-- <div id="archival" class="archival" style="width:300px; height: 180px"></div> -->
+            <!-- 饼状图 -->
             <div id="archival" class="archival" style="width:300px; height: 180px"></div>
           </div>
         </div>
@@ -51,16 +54,30 @@
       <div class="middle">
         <div class="middle-show">
           <img class="middle-bg" src="../assets/kuang-middle.png" alt="">
+          <div class="run-days">
+            <p class="run-text">安全运行天数</p>
+            <div class="run-day-box">
+              <div class="run-day-item">0</div>
+              <div class="run-day-item">1</div>
+              <div class="run-day-item">5</div>
+              <div class="run-day-item">3</div>
+              <div class="run-day-text">天</div>
+            </div>
+          </div>
+          <div class="popup-warning">
+            <div class="popup-box"></div>
+            <div class="popup-box"></div>
+          </div>
         </div>
         <div class="middle-item">
           <div class="tempt-box-one">
-            <div id="pie1" style="width: 300px; height: 300px;"></div>
+            <div id="pie1" style="width: 240px; height: 240px;"></div>
             <p class="room-title">房间一</p>
           </div>
-          <div class="tempt-box-one">
-            <div id="pie2" style="width: 300px; height: 300px;"></div>
+          <!-- <div class="tempt-box-one">
+            <div id="pie2" style="width: 240px; height: 240px;"></div>
             <p class="room-title">房间二</p>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="right">
@@ -104,24 +121,26 @@
                 <li class="table-th-item">位置</li>
               </ul>
               <div class="table-body">
-                <div class="table-body-item">
-                  <div class="table-con" v-for="(item,index) in warningData" :key="index">
-                    <ul class="item-ul even" v-if="index % 2 == 0">
-                      <li class="item-li">{{ item.time }}</li>
-                      <li class="item-li">{{ item.equipmentNo }}</li>
-                      <li class="item-li" v-if="item.status == 0">正常</li>
-                      <li class="item-li" v-else>不正常</li>
-                      <li class="item-li">{{ item.localtion }}</li>
-                    </ul>
-                    <ul class="item-ul odd" v-else>
-                      <li class="item-li">{{ item.time }}</li>
-                      <li class="item-li">{{ item.equipmentNo }}</li>
-                      <li class="item-li" v-if="item.status == 0">正常</li>
-                      <li class="item-li" v-else>不正常</li>
-                      <li class="item-li">{{ item.localtion }}</li>
-                    </ul>
+                <vuescroll :ops="ops">
+                  <div class="table-body-item">
+                    <div class="table-con" v-for="(item,index) in warningData" :key="index">
+                      <ul class="item-ul even" v-if="index % 2 == 0">
+                        <li class="item-li">{{ item.time }}</li>
+                        <li class="item-li">{{ item.equipmentNo }}</li>
+                        <li class="item-li" v-if="item.status == 0">正常</li>
+                        <li class="item-li" v-else>不正常</li>
+                        <li class="item-li">{{ item.localtion }}</li>
+                      </ul>
+                      <ul class="item-ul odd" v-else>
+                        <li class="item-li">{{ item.time }}</li>
+                        <li class="item-li">{{ item.equipmentNo }}</li>
+                        <li class="item-li" v-if="item.status == 0">正常</li>
+                        <li class="item-li" v-else>不正常</li>
+                        <li class="item-li">{{ item.localtion }}</li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
+                </vuescroll>
               </div>
             </div>
           </div>
@@ -139,9 +158,12 @@ let echarts = require('echarts/lib/echarts')
 require('echarts/lib/chart/bar')
 // 引入仪表盘组件
 require('echarts/lib/chart/gauge')
+// 引入饼图组件
+require('echarts/lib/chart/pie')
 // 引入提示框和title组件
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
+import vuescroll from 'vuescroll';
 import HelloWorld from '@/components/HelloWorld.vue'
 // import Vuetable from '@/components/vuetable'
 import { setInterval } from 'timers';
@@ -149,7 +171,8 @@ import { setInterval } from 'timers';
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    HelloWorld,
+    vuescroll
   },
   data() {
     return {
@@ -263,7 +286,7 @@ export default {
       percent: 0,
       rate: 0,
       currEquiqSum: 58,
-      equiqList: [
+      equiqList: [  // 设备数量及状态
         {
           name: '摄像头',
           enableNum: 18,
@@ -288,29 +311,43 @@ export default {
           equiqSum: 20,
           isActive: false
         },
-      ]
+      ],
+      ops: {  //滚动条参数配置
+        rail: {
+          background: '#25a5f9',
+          opacity: 1,
+          size: '6px',
+          specifyBorderRadius: false,
+          gutterOfEnds: null,
+          gutterOfSide: '2px',
+          keepShow: false
+        },
+        bar: {  
+          showDelay: 500,
+          onlyShowBarOnScroll: true,
+          keepShow: true,
+          background: '#2a5beb',
+          opacity: 1,
+          hoverStyle: false,
+          specifyBorderRadius: false,
+          minSize: false,
+          size: '6px',
+          disable: false,
+        }
+      }
     }
   },
   mounted() {
     let pie1 = echarts.init(document.getElementById('pie1'))
-    let pie2 = echarts.init(document.getElementById('pie2'))
-    this.drawPie(pie1)
-    this.drawPie(pie2)
-    this.drawLine()
+    // let pie2 = echarts.init(document.getElementById('pie2'))
+    this.drawGauge(pie1)
+    // this.drawPie(pie2)
     // this.updateDonut(35) // 初始化百分比
-    let _this = this
-    setInterval(() => {
-        // _this.percent = Math.random()
-        // _this.rate = (_this.percent * 100).toFixed(2)
-      // _this.equiqList.forEach(item => {
-      //   item.isActive = true
-      // })
-    },1000)
-    _this.equiqList.forEach(item => {
-      setInterval((val) => {
-        console.log(item)
-      },1000)
-    })
+    // 基于准备好的dom，初始化echarts实例
+    let archival = echarts.init(document.getElementById('archival'))
+    // 柱状图
+    // this.drawLine(archival)
+    this.drawPie(archival)
   },
   computed: {
     dashOffset() {
@@ -318,11 +355,9 @@ export default {
     }
   },
   methods: {
-    drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let archival = echarts.init(document.getElementById('archival'))
+    drawLine(obj) {
       // 绘制图表
-      archival.setOption({
+      obj.setOption({
         // title: { text: '库房档案数量统计' },
         tooltip: {},
         barWidth : 20,
@@ -362,6 +397,55 @@ export default {
       });
     },
     drawPie(obj) {
+      console.log(obj)
+      let option = {
+        title : {
+          text: '某库房档案数量统计',
+          color: '#2c91a9',
+          x:'center',
+          textStyle: {
+            fontSize: 16,
+            fontWeight: "bolder",
+            color: "#2c91a9"
+          }
+        },
+        tooltip : {
+          trigger: 'item',
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        color:['#0367a5', '#0db3d9','#f29422','#f2cb04','#d93d4a'],
+        legend: {
+          orient: 'vertical',
+          right: 'right',
+          data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+        },
+        series : [
+          {
+            name: '数量统计',
+            type: 'pie',
+            radius : '55%',
+            center: ['50%', '60%'],
+            data:[
+              {value:335, name:'档案一'},
+              {value:310, name:'档案二'},
+              {value:234, name:'档案三'},
+              {value:135, name:'档案四'},
+              {value:1548, name:'档案五'}
+            ],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      }
+      console.log(option)
+      obj.setOption(option)
+    },
+    drawGauge(obj) {
       // pie1.setOption();
       let option = {
         backgroundColor: 'transparent',
@@ -447,10 +531,11 @@ export default {
           }
         ]
       }
-      setInterval(function() {
-        option.series[0].data[0].value = (50 - (Math.random()*50)).toFixed(1);
-        obj.setOption(option)
-      },2000);
+      obj.setOption(option)
+      // setInterval(function() {
+      //   option.series[0].data[0].value = (50 - (Math.random()*50)).toFixed(1);
+      //   obj.setOption(option)
+      // },2000);
     },
     updateDonut (percent) {
       // 圆形进度
@@ -489,6 +574,8 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .home
+  // background url('../assets/warehouse_bg.jpg') no-repeat center
+  // background-size 100% 100%
   height calc( 100% - 80px )
   padding-top 74px
 .container-bg
@@ -724,19 +811,65 @@ export default {
   .middle
     flex 1
     margin-top 40px
-    position relative
+    // position relative
     box-sizing border-box
     .middle-show
       width 680px
+      height 423px
+      position relative
+      overflow hidden
       .middle-bg
         width 100%
+        position absolute
+        top 0
+        left 0
+        z-index -1
+      .run-days
+        margin 30px 0 0 30px
+        .run-text
+          font-size 14px
+          color #388ca0
+          text-align left
+        .run-day-box
+          display flex
+          justify-content flex-start
+          align-items baseline
+          .run-day-item
+            width 28px
+            height 48px
+            line-height 48px
+            border 1px solid #263f5b
+            box-sizing border-box
+            text-align center
+            color #05bef6
+            font-size 48px
+            font-weight bold
+            margin-right 10px
+          .run-day-text
+            color #388ca0
+      .popup-warning
+        width 450px
+        padding 20px
+        position absolute
+        left 50%
+        transform translateX(-50%)
+        overflow hidden
+        box-sizing border-box
+        .popup-box
+          float left
+          width 200px
+          height 250px
+          margin-right 10px
+          border 1px solid #197899
+          box-sizing border-box
+        .popup-box:nth-of-type(2) 
+          margin-right 0
     .middle-item
       // position absolute
       // bottom 0
       // left 0
       height 300px
       display flex
-
       border 1px solid #043778
       box-sizing border-box
   .right
@@ -780,7 +913,6 @@ export default {
           overflow auto
           box-sizing border-box
           .table-body-item
-            height 40px
             border-bottom 1px solid #0c3548
             box-sizing border-box
             .table-con
