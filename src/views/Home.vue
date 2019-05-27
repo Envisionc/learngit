@@ -74,10 +74,17 @@
             <div id="pie1" style="width: 240px; height: 240px;"></div>
             <p class="room-title">房间一</p>
           </div>
-          <!-- <div class="tempt-box-one">
-            <div id="pie2" style="width: 240px; height: 240px;"></div>
-            <p class="room-title">房间二</p>
-          </div> -->
+          <div class="tempt-box-one">
+            <div id="v1">
+              <select v-model="val">
+                  <option>vvv</option>
+                  <option value="uuu">vue</option>
+                  <option value="e">eee</option>
+              </select>
+            </div>
+            <div id="usingStatistical" style="width: 300px; height: 240px;"></div>
+            <!-- <p class="room-title">房间二</p> -->
+          </div>
         </div>
       </div>
       <div class="right">
@@ -334,7 +341,8 @@ export default {
           size: '6px',
           disable: false,
         }
-      }
+      },
+      val: 'vvv'
     }
   },
   mounted() {
@@ -344,10 +352,13 @@ export default {
     // this.drawPie(pie2)
     // this.updateDonut(35) // 初始化百分比
     // 基于准备好的dom，初始化echarts实例
+    // 饼图
     let archival = echarts.init(document.getElementById('archival'))
-    // 柱状图
-    // this.drawLine(archival)
     this.drawPie(archival)
+    // 柱状图 usingStatistical
+    let usingStatistical = echarts.init(document.getElementById('usingStatistical'))
+    this.drawLine(usingStatistical)
+    
   },
   computed: {
     dashOffset() {
@@ -358,7 +369,14 @@ export default {
     drawLine(obj) {
       // 绘制图表
       obj.setOption({
-        // title: { text: '库房档案数量统计' },
+        title: { 
+          text: '库房档案借阅统计',
+          textStyle: {
+            fontSize: 16,
+            fontWeight: "bolder",
+            color: "#2c91a9"
+          }
+        },
         tooltip: {},
         barWidth : 20,
         xAxis: {
@@ -390,7 +408,7 @@ export default {
         },
         series: [{
           color: ['#1a68ff'],
-          name: '数量',
+          name: '借阅量',
           type: 'bar',
           data: [5, 20, 36, 10, 10, 20]
         }]
