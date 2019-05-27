@@ -4,31 +4,9 @@
     <div class="container">
       <div class="left">
         <div id="safe" class="item have-bg">
-          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-          <!-- <h6 class="item-title">安防</h6> -->
-          <!-- <ul class="item-images clearfix">
-            <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
-              <img class="_img" :src="item.url" :alt="'img-' + index" >
-            </li>
-          </ul> -->
           <h6 class="item-title">设备状态</h6>
           <div class="circle-chart">
             <div class="donut-chart">
-              <!-- <div id="section-one" class="clip">
-                <div class="p-item"></div>
-              </div>
-              <div id="section-two" class="clip">
-                <div class="p-item"></div>
-              </div>
-              <div id="section-three" ref="section3" class="clip">
-                <div class="p-item" ref="section3Item"></div>
-              </div>
-              <div class="center">
-                <a class="percent-box">
-                  <span class="percent" ref="percent">0</span><small>%</small>
-                </a>
-                <p>已完成</p>
-              </div> -->
               <div class="progress-circle">
                 <svg :width="radiusW" :height="radiusH" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">  
                     <!-- width/height表示svg的宽高,viewBox表示根据svg的宽高拉出来的大小 -->  
@@ -39,15 +17,12 @@
                 <div class="equipment-info">
                     <div class="enable-rate-text">启用率</div>
                     <div class="rate"><span>{{ rate }}</span><span>%</span></div>
-                    <div class="equipment-sum">总数: {{ equiqSum }}</div>
+                    <div class="equipment-sum">总数: {{ currEquiqSum }}</div>
                 </div>
               </div>
             </div>
             <div class="tab-list">
-              <div class="tab-item">摄像头</div>
-              <div class="tab-item">门</div>
-              <div class="tab-item">灯</div>
-              <div class="tab-item">空调</div>
+              <div :class="item.isActive ? 'tab-item active' : 'tab-item'" @mousemove="selectEquiq(item)" v-for="(item, index) in equiqList" :key="index">{{ item.name }}</div>
             </div>
           </div>
         </div>
@@ -285,9 +260,35 @@ export default {
       dashArray: Math.PI * 100,
       radiusW: 120,
       radiusH: 140,
-      percent: 1,
+      percent: 0,
       rate: 0,
-      equiqSum: 58
+      currEquiqSum: 58,
+      equiqList: [
+        {
+          name: '摄像头',
+          enableNum: 18,
+          equiqSum: 30,
+          isActive: false
+        },
+        {
+          name: '门',
+          enableNum: 8,
+          equiqSum: 15,
+          isActive: false
+        },
+        {
+          name: '灯',
+          enableNum: 4,
+          equiqSum: 12,
+          isActive: false
+        },
+        {
+          name: '空调',
+          enableNum: 14,
+          equiqSum: 20,
+          isActive: false
+        },
+      ]
     }
   },
   mounted() {
@@ -299,9 +300,17 @@ export default {
     // this.updateDonut(35) // 初始化百分比
     let _this = this
     setInterval(() => {
-        _this.percent = Math.random()
-        _this.rate = (_this.percent * 100).toFixed(2)
+        // _this.percent = Math.random()
+        // _this.rate = (_this.percent * 100).toFixed(2)
+      // _this.equiqList.forEach(item => {
+      //   item.isActive = true
+      // })
     },1000)
+    _this.equiqList.forEach(item => {
+      setInterval((val) => {
+        console.log(item)
+      },1000)
+    })
   },
   computed: {
     dashOffset() {
@@ -464,6 +473,16 @@ export default {
         $elItem.style.backgroundColor = '#09effb'
       }
       $txt.innerHTML = percent
+    },
+    selectEquiq(obj) {
+      console.log(obj)
+      this.equiqList.forEach(item => {
+        item.isActive = false
+      })
+      obj.isActive = true
+      this.percent = obj.enableNum/obj.equiqSum
+      this.rate = (this.percent*100).toFixed(2)
+      this.currEquiqSum = obj.equiqSum
     }
   }
 }
@@ -617,12 +636,15 @@ export default {
             border 1px solid #00343f
             // border 1px solid #359093
             box-sizing border-box
+            cursor pointer
           .tab-item:nth-of-type(1),
           .tab-item:nth-of-type(4)
             padding-right 10px
           .tab-item:nth-of-type(2),
           .tab-item:nth-of-type(3)
             padding-right 34px
+          .active
+            border 2px solid #318f93
       .item-images
         padding-top 40px
         padding-left 30px
