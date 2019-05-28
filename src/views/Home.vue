@@ -832,8 +832,8 @@ export default {
     // position relative
     box-sizing border-box
     .middle-show
-      width 680px
-      height 423px
+      // width 680px
+      height 444px
       position relative
       overflow hidden
       .middle-bg

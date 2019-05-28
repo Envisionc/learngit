@@ -1,91 +1,92 @@
 <template>
-  <div class="about">
-    <div class="circleProgress_wrapper">
-      <div class="wrapper right">
-          <div class="circleProgress rightcircle"></div>
-      </div>
-      <div class="wrapper left">
-          <div class="circleProgress leftcircle"></div>
-      </div>
+    <div class="contanier">
+        <div class="content">
+            <div class="select-option">
+                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                    <el-option 
+                        v-for="item in selectList" 
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+            </div>
+            <div class="tab-page">
+                <el-tabs type="border-card">
+                    <el-tab-pane v-for="(item,index) in roomList" :key="index" :label="item.name">
+                        <div class="tab-content" v-if="index == 0">
+                            <roomInfo></roomInfo>
+                        </div>
+                        <div class="tab-content" v-if="index == 1">我是房间二</div>
+                        <div class="tab-content" v-if="index == 2">我是房间三</div>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
+import roomInfo from '@/components/roomInfo'
 export default {
-
+    data() {
+        return {
+            selectList: [
+                {
+                    id:0,
+                    name:'库房一'
+                },
+                {
+                    id:1,
+                    name:'库房二'
+                },
+                {
+                    id:2,
+                    name:'库房三'
+                },
+            ],
+            form: {
+                region: ''
+            },
+            roomList: [
+                {id:0,name:'东一房'},
+                {id:1,name:'北三房'},
+                {id:2,name:'南一房'},
+            ]
+        }
+    },
+    components: {
+        roomInfo
+    },
+    methods: {
+        selectGet() {
+            console.log("111")
+        },
+        handleClick(tab, event) {
+            console.log(tab, event);
+        }
+    }
 }
 </script>
 
 <style scoped>
-.circleProgress_wrapper{
-  width: 200px;
-  height: 200px;
-  margin: 50px auto;
-  position: relative;
-  border:1px solid #ddd;
+.contanier {
+    height: calc( 100vh - 80px );
+    background: #f3f3f3;
 }
-.wrapper{
-  width: 100px;
-  height: 200px;
-  position: absolute;
-  top:0;
-  overflow: hidden;
+.content {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
 }
-.right{
-    right:0;
+.select-option {
+    float: left;
 }
-.left{
-    left:0;
+.tab-page {
+    background: #fff;
+    margin-top: 60px;
+    color: #333;
 }
-.circleProgress{
-    width: 160px;
-    height: 160px;
-    border:20px solid transparent;
-    border-radius: 50%;
-    position: absolute;
-    top:0;
-}
-.rightcircle{
-    border-top:20px solid green;
-    border-right:20px solid green;
-    right:0;
-    -webkit-animation: circleProgressLoad_right 5s linear infinite;
-}
-.circleProgress{
-    transform: rotate(45deg);
-}
-.leftcircle{
-    border-bottom:20px solid green;
-    border-left:20px solid green;
-    left:0;
-    -webkit-animation: circleProgressLoad_left 5s linear infinite;
-}
-
-.circleProgress{
-            /* width: 160px;
-            height: 160px;
-            border:20px solid transparent;
-            border-radius: 50%;
-            position: absolute;
-            top:0; */
-            transform: rotate(-135deg);
-        }
-        @-webkit-keyframes circleProgressLoad_right{
-            0%{
-                -webkit-transform: rotate(-135deg);
-            }
-            50%,100%{
-                -webkit-transform: rotate(45deg);
-            }
-        }
-        @-webkit-keyframes circleProgressLoad_left{
-            0%,50%{
-                -webkit-transform: rotate(-135deg);
-            }
-            100%{
-                -webkit-transform: rotate(45deg);
-            }
-        }
 </style>
 
