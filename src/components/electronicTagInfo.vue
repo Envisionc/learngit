@@ -2,14 +2,6 @@
     <div class="con-item">
         <div class="time-line">
             <div class="time-query">
-                <el-select class="query" @change="selectTIime" v-model="airConditionerList[0].conditionName" placeholder="请选择库房">
-                    <el-option 
-                        v-for="item in airConditionerList" 
-                        :key="item.id"
-                        :label="item.conditionName"
-                        :value="item.id"
-                    ></el-option>
-                </el-select>
                 <el-select @change="selectTIime" v-model="form.region" placeholder="请选择库房">
                     <el-option 
                         v-for="item in dateList" 
@@ -23,23 +15,24 @@
             <!-- <div class="vuescroll-box"> -->
                 <vuescroll :ops="ops">
                     <div class="timeline-box">
-                        <div class="timeline-item" v-for="(item, index) in snapImages" :key="index">
-                            <img class="camera-img" v-if="item.state == 'on'" src="../assets/image/on.png" alt="">
-                            <img class="camera-img" v-if="item.state == 'off'" src="../assets/image/off.png" alt="">
-                            <div class="line" :style="{visibility:index == (snapImages.length - 1) ? 'hidden': 'visible'}"></div>
-                            <p class="date-text">{{ item.title }}</p>
-                            <p class="operator" v-if="item.state == 'on'">{{ item.operator }} (开)</p>
-                            <p class="operator" v-if="item.state == 'off'">{{ item.operator }} (关)</p>
+                        <div class="timeline-item" v-for="(item, index) in archivesInfo" :key="index">
+                            <img class="camera-img" ref="scaleImg" v-if="item.state == 1" src="../assets/image/on.png" alt="" @mousemove="scaleout(index)" @mouseout="scalein(index)">
+                            <img class="camera-img" ref="scaleImg" v-if="item.state == 0" src="../assets/image/off.png" alt="" @mousemove="scaleout(index)" @mouseout="scalein(index)">
+                            <div class="line" :style="{visibility:index == (archivesInfo.length - 1) ? 'hidden': 'visible'}"></div>
+                            <p class="date-text" v-if="item.state == 0">{{ item.loanTime }}</p>
+                            <p class="date-text" v-if="item.state == 1">{{ item.archiveTime }}</p>
+                            <p class="operator" v-if="item.state == 0">{{ item.fileNumber }} (借出)</p>
+                            <p class="operator" v-if="item.state == 1">{{ item.fileNumber }} (归档)</p>
                         </div>
                     </div>
                 </vuescroll>
             <!-- </div> -->
         </div>
         <el-table :data="conditionInfo" style="width: 100%;margin-bottom:55px;margin-top:80px;">
-            <el-table-column  prop="conditionName"  label="空调名称" align="center"></el-table-column>
-            <el-table-column  prop="conditionTemp" label="记录温度" align="center"></el-table-column>
-            <el-table-column  prop="recondingTime"  label="记录时间" align="center"></el-table-column>
-            <el-table-column  prop="operator"  label="操作人" width="140" align="center"></el-table-column>
+            <el-table-column  prop="conditionName"  label="档案号" align="center"></el-table-column>
+            <el-table-column  prop="conditionTemp" label="题名" align="center"></el-table-column>
+            <el-table-column  prop="recondingTime"  label="借出时间" align="center"></el-table-column>
+            <el-table-column  prop="operator"  label="归档时间" align="center"></el-table-column>
         </el-table>
         <div class="pagin">
             <span class="total">共{{totalCount}}条数据</span>
@@ -63,25 +56,25 @@ export default {
         return {
             conditionInfo: [
                 {
-                    conditionName: '空调一',
-                    conditionTemp: '23.1',
+                    conditionName: '120103011111',
+                    conditionTemp: '《孔府档案选》',
                     recondingTime: '2019-05-21 10:08:56',
-                    operator: '张小狗'
+                    operator: '2019-05-29 12:08:56'
                 }, {
-                    conditionName: '空调一',
-                    conditionTemp: '23.1',
+                    conditionName: '120103011112',
+                    conditionTemp: '孔府档案选编',
                     recondingTime: '2019-05-21 10:08:56',
-                    operator: '张小狗'
+                    operator: '2019-06-21 10:00:56'
                 }, {
-                    conditionName: '空调一',
-                    conditionTemp: '23.1',
+                    conditionName: '120103011113',
+                    conditionTemp: '孔府档案的法律史料价值研究',
                     recondingTime: '2019-05-21 10:08:56',
-                    operator: '张小狗'
+                    operator: '2019-05-23 19:08:56'
                 }, {
-                    conditionName: '空调一',
-                    conditionTemp: '23.1',
+                    conditionName: '120103011114',
+                    conditionTemp: '孔府档案概述',
                     recondingTime: '2019-05-21 10:08:56',
-                    operator: '张小狗'
+                    operator: '2019-05-25 13:08:23'
                 }
             ],
             currImage: '',
@@ -110,72 +103,51 @@ export default {
                     date: '近一个月'
                 },
             ],
-            airConditionerList: [
+            archivesInfo: [
                 {
-                    id: 0,
-                    conditionName: '空调一'
+                    fileNumber: '#15121', //档案号
+                    archivesTitle: '《孔府档案选》',  //档案题名
+                    loanTime: '2019-02-14 18:25:08',   //借出时间
+                    archiveTime: '2019-02-17 18:25:08', //归档时间
+                    state: 0,    //状态 0--借出  1---归档
                 },
                 {
-                    id: 1,
-                    conditionName: '空调二'
+                    fileNumber: '#15121', //档案号
+                    archivesTitle: '',  //档案题名
+                    loanTime: '2019-02-14 18:25:08',   //借出时间
+                    archiveTime: '2019-02-17 18:25:08', //归档时间
+                    state: 1,    //状态
                 },
                 {
-                    id: 3,
-                    conditionName: '空调三'
+                    fileNumber: '#12301', //档案号
+                    archivesTitle: '',  //档案题名
+                    loanTime: '2019-02-14 18:25:08',   //借出时间
+                    archiveTime: '2019-02-17 18:25:08', //归档时间
+                    state: 1,    //状态
                 },
                 {
-                    id: 4,
-                    conditionName: '空调四'
-                },
-            ],
-            snapImages: [
-                {
-                    title: '2019-02-14 18:25:08',
-                    url: require('../assets/002.jpg'),
-                    state: 'on',
-                    operator: '张三'
+                    fileNumber: '#12351', //档案号
+                    archivesTitle: '',  //档案题名
+                    loanTime: '2019-02-14 18:25:08',   //借出时间
+                    archiveTime: '2019-02-17 18:25:08', //归档时间
+                    state: 0,    //状态
                 },
                 {
-                    title: '2019-02-14 18:25:08',
-                    url: require('../assets/002.jpg'),
-                    state: 'off',
-                    operator: '张大大'
+                    fileNumber: '#45121', //档案号
+                    archivesTitle: '',  //档案题名
+                    loanTime: '2019-02-14 18:25:08',   //借出时间
+                    archiveTime: '2019-02-17 18:25:08', //归档时间
+                    state: 1,    //状态
                 },
                 {
-                    title: '2019-02-14 18:25:08',
-                    url: require('../assets/002.jpg'),
-                    state: 'on',
-                    operator: '李四'
-                },
-                {
-                    title: '2019-02-14 18:25:08',
-                    url: require('../assets/002.jpg'),
-                    state: 'off',
-                    operator: '王五'
-                },
-                {
-                    title: '2019-02-14 18:25:08',
-                    url: require('../assets/002.jpg'),
-                    state: 'on',
-                    operator: '赵六'
-                },
-                {
-                    title: '2019-02-14 18:25:08',
-                    url: require('../assets/002.jpg'),
-                    state: 'off',
-                    operator: '刘七'
+                    fileNumber: '#24121', //档案号
+                    archivesTitle: '',  //档案题名
+                    loanTime: '2019-02-14 18:25:08',   //借出时间
+                    archiveTime: '2019-02-17 18:25:08', //归档时间
+                    state: 0,    //状态
                 }
             ],
             ops: {  //滚动条参数配置
-                // rail: {
-                //     background: '#25a5f9',
-                //     opacity: 0,
-                //     size: '6px',
-                //     specifyBorderRadius: false,
-                //     gutterOfEnds: null,
-                //     gutterOfSide: '2px',
-                //     keepShow: false
-                // },
                 bar: {  
                     showDelay: 500,
                     onlyShowBarOnScroll: true,
@@ -203,6 +175,17 @@ export default {
         selectTIime () {
             console.log("111")
         },
+        scaleout (index) {
+            // console.log(index)
+            // console.log(this.$refs.scaleImg[index])
+            let nel = this.$refs.scaleImg[index]
+            nel.classList.add('dynamic')
+        },
+        scalein (index) {
+            let nel = this.$refs.scaleImg[index]
+            nel.classList.remove('dynamic')
+            // remove
+        },
         checkSubmember (val,index){
             console.log(val,index)
             this.currImage = val.snapIamge;
@@ -225,7 +208,6 @@ export default {
 .time-line {
     width: 100%;
     height: 220px;
-    /* overflow: hidden; */
 }
 .time-query {
     display: flex;
@@ -249,24 +231,31 @@ export default {
     border: 1px solid #eee;
     box-sizing: border-box;
     cursor: pointer;
-    /* overflow: scroll; */
 }
 .timeline-item {
     height: 100%;
-    /* display:table-cell;
-    vertical-align: middle; */
     display: flex;
     justify-content: flex-start;
     align-items: center;
     position: relative;
 }
-/* .timeline-item:nth-of-type(1) {
-    padding-left: 60px;
-} */
 .camera-img {
     width: 24px;
     height: 24px;
     display: inline-block;
+}
+.dynamic {
+    animation:scaleout 1.3s infinite ease-in-out;
+}
+@keyframes scaleout {
+    0% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    } 100% {
+          transform: scale(1.2);
+          -webkit-transform: scale(1.2);
+          opacity: 1;
+      }
 }
 .line {
     width: 140px;
@@ -298,8 +287,6 @@ export default {
     width: 40px;
     height: 30px;
     display: block;
-    /* visibility:hidden
-    visibility:visible */
 }
 .modal{
     position: fixed;

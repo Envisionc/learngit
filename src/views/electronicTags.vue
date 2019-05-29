@@ -1,11 +1,33 @@
 <template>
-    <div class="wrap">
-        <secondaryPages :selectList="selectList" :form="form" :roomList="roomList"/>
+    <div class="contanier">
+        <div class="content">
+            <div class="select-option">
+                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                    <el-option 
+                        v-for="item in selectList" 
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id"
+                    ></el-option>
+                </el-select>
+            </div>
+            <div class="tab-page">
+                <el-tabs type="border-card">
+                    <el-tab-pane v-for="(item,index) in roomList" :key="index" :label="item.name">
+                        <div class="tab-content" v-if="index == 0">
+                            <electronicTagInfo />
+                        </div>
+                        <div class="tab-content" v-if="index == 1">我是房间二</div>
+                        <div class="tab-content" v-if="index == 2">我是房间三</div>
+                    </el-tab-pane>
+                </el-tabs>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import secondaryPages from '@/components/public/secondaryPages'
+import electronicTagInfo  from '@/components/electronicTagInfo'
 export default {
     data() {
         return {
@@ -27,14 +49,14 @@ export default {
                 region: ''
             },
             roomList: [
-                {id:0,name:'东一房'},
-                {id:1,name:'北三房'},
-                {id:2,name:'南一房'},
+                {id:0,name:'东一楼001室'},
+                {id:1,name:'东一楼002室'},
+                {id:2,name:'东一楼003室'},
             ]
         }
     },
     components: {
-        secondaryPages
+        electronicTagInfo
     },
     methods: {
         selectGet() {
@@ -48,8 +70,22 @@ export default {
 </script>
 
 <style scoped>
-.wrap {
+.contanier {
+    height: calc( 100vh - 80px );
+    background: #f3f3f3;
+}
+.content {
     width: 100%;
     height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.select-option {
+    float: left;
+}
+.tab-page {
+    background: #fff;
+    margin-top: 60px;
+    color: #333;
 }
 </style>
