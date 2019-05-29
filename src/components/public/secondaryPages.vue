@@ -15,7 +15,7 @@
                 <el-tabs type="border-card">
                     <el-tab-pane v-for="(item,index) in roomList" :key="index" :label="item.name">
                         <div class="tab-content" v-if="index == 0">
-                            <temperatureCtrInfo />
+                            <!-- <roomInfo></roomInfo> -->
                         </div>
                         <div class="tab-content" v-if="index == 1">我是房间二</div>
                         <div class="tab-content" v-if="index == 2">我是房间三</div>
@@ -27,36 +27,41 @@
 </template>
 
 <script>
-import temperatureCtrInfo  from '@/components/temperatureCtrInfo'
+import roomInfo from '@/components/roomInfo'
 export default {
     data() {
         return {
-            selectList: [
-                {
-                    id:0,
-                    name:'库房一'
-                },
-                {
-                    id:1,
-                    name:'库房二'
-                },
-                {
-                    id:2,
-                    name:'库房三'
-                },
-            ],
-            form: {
-                region: ''
-            },
-            roomList: [
-                {id:0,name:'东一房'},
-                {id:1,name:'北三房'},
-                {id:2,name:'南一房'},
-            ]
+            // selectList: [
+            //     {
+            //         id:0,
+            //         name:'库房一'
+            //     },
+            //     {
+            //         id:1,
+            //         name:'库房二'
+            //     },
+            //     {
+            //         id:2,
+            //         name:'库房三'
+            //     },
+            // ],
+            // form: {
+            //     region: ''
+            // },
+            // roomList: [
+            //     {id:0,name:'东一房'},
+            //     {id:1,name:'北三房'},
+            //     {id:2,name:'南一房'},
+            // ]
         }
     },
+    props: {
+        selectList: Array,
+        form: Object,
+        roomList:Array
+    },
     components: {
-        temperatureCtrInfo
+        roomInfo
     },
     methods: {
         selectGet() {
