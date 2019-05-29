@@ -6,7 +6,7 @@
       <div id="nav">
         <router-link to="/">首页</router-link> |
         <router-link to="/about">实时监控</router-link> |
-        <router-link to="/safetyProtection">安防</router-link> |
+        <router-link to="/safetyProtection">门禁</router-link> |
         <router-link to="/temperatureControl">温控</router-link> |
         <router-link to="/electronicTags">电子标签</router-link> |
         <router-link to="/archivalDataStatistics">档案数据统计</router-link> |

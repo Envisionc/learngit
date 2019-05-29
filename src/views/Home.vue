@@ -322,7 +322,7 @@ export default {
       ops: {  //滚动条参数配置
         rail: {
           background: '#25a5f9',
-          opacity: 1,
+          opacity: 0,
           size: '6px',
           specifyBorderRadius: false,
           gutterOfEnds: null,
