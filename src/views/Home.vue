@@ -76,11 +76,14 @@
           </div>
           <div class="tempt-box-one">
             <div id="v1">
-              <select v-model="val">
-                  <option>vvv</option>
-                  <option value="uuu">vue</option>
-                  <option value="e">eee</option>
-              </select>
+              <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                <el-option 
+                    v-for="item in selectList" 
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                ></el-option>
+              </el-select>
             </div>
             <div id="usingStatistical" style="width: 300px; height: 240px;"></div>
             <!-- <p class="room-title">房间二</p> -->
@@ -342,7 +345,28 @@ export default {
           disable: false,
         }
       },
-      val: 'vvv'
+      val: 'vvv',
+      selectList: [
+          {
+              id: 0,
+              name: '总库房'
+          },
+          {
+              id: 1,
+              name: '库房一'
+          },
+          {
+              id: 2,
+              name: '库房二'
+          },
+          {
+              id: 3,
+              name: '库房三'
+          },
+      ],
+      form: {
+          region: ''
+      },
     }
   },
   mounted() {
