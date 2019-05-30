@@ -33,25 +33,34 @@ export default {
         return {
             selectList: [
                 {
-                    id:0,
-                    name:'库房一'
+                    id: 0,
+                    name: '库房一'
                 },
                 {
-                    id:1,
-                    name:'库房二'
+                    id: 1,
+                    name: '库房二'
                 },
                 {
-                    id:2,
-                    name:'库房三'
+                    id: 2,
+                    name: '库房三'
                 },
             ],
             form: {
                 region: ''
             },
             roomList: [
-                {id:0,name:'东一房'},
-                {id:1,name:'北三房'},
-                {id:2,name:'南一房'},
+                {
+                    id: 0,
+                    name: '东一房'
+                },
+                {
+                    id: 1,
+                    name: '北三房'
+                },
+                {
+                    id: 2,
+                    name: '南一房'
+                },
             ]
         }
     },
