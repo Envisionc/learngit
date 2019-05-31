@@ -94,24 +94,6 @@ export default {
                     name: '客户档案'
                 },
             ],
-            archivalList: [
-                {
-                    id: 0,
-                    name: '档1'
-                },
-                {
-                    id: 1,
-                    name: '档2'
-                },
-                {
-                    id: 2,
-                    name: '档3'
-                },
-                {
-                    id: 3,
-                    name: '档4'
-                },
-            ],
             fileCollection: [
                 {
                     name: '审计档案以券管理',
@@ -124,21 +106,21 @@ export default {
                 },
                 {
                     name: '专门档案以券管理',
-                    archives: 556,
-                    fileNum: 2520,
-                    attachmentNum: 3699,
-                    pages: 1014,
-                    fullTextNum: 1552,
-                    fullTextCapacity: '34.5GB'
+                    archives: 500,
+                    fileNum: 1220,
+                    attachmentNum: 362,
+                    pages: 1524,
+                    fullTextNum: 2552,
+                    fullTextCapacity: '3.5GB'
                 },
                 {
                     name: '实物档案以券管理',
-                    archives: 556,
-                    fileNum: 2520,
-                    attachmentNum: 3699,
-                    pages: 1014,
-                    fullTextNum: 1552,
-                    fullTextCapacity: '34.5GB'
+                    archives: 1050,
+                    fileNum: 1520,
+                    attachmentNum: 2252,
+                    pages: 654,
+                    fullTextNum: 2992,
+                    fullTextCapacity: '988MB'
                 },
                 {
                     name: '声像档案以券管理',
@@ -176,10 +158,13 @@ export default {
     mounted () {
         const obj = echarts.init(document.getElementById('archivalStatistics0'))
         const obj1 = echarts.init(document.getElementById('archivalStatistics1'))
+        const obj2 = echarts.init(document.getElementById('archivalStatistics2'))
         const list0 = [556, 2520, 3699, 1014, 1552, 2400]
-        const list1 = [500, 1220, 362, 1014, 2552, 900]
+        const list1 = [500, 1220, 362, 1524, 2552, 900]
+        const list2 = [1050, 1520, 2252, 654, 2992, 650]
         this.drawLine(obj, list0)
         this.drawLine(obj1, list1)
+        this.drawLine(obj2, list2)
     },
     methods: {
         selectGet() {
@@ -227,7 +212,7 @@ export default {
                 },
                 series: [{
                 color: ['#FFC125'], //柱状图的颜色
-                name: '借阅量',
+                name: '数量',
                 type: 'bar',
                 data: args
                 }]
@@ -242,7 +227,7 @@ export default {
 
 <style scoped>
 .contanier {
-    height: calc( 100vh - 80px );
+    height: calc( 100% - 80px );
     background: #f3f3f3;
 }
 .content {

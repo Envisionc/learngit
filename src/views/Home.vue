@@ -75,7 +75,7 @@
             <p class="room-title">房间一</p>
           </div>
           <div class="tempt-box-one">
-            <div id="v1">
+            <!-- <div id="v1">
               <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
                 <el-option 
                     v-for="item in selectList" 
@@ -84,7 +84,7 @@
                     :value="item.id"
                 ></el-option>
               </el-select>
-            </div>
+            </div> -->
             <div id="usingStatistical" style="width: 300px; height: 240px;"></div>
             <!-- <p class="room-title">房间二</p> -->
           </div>
@@ -390,6 +390,9 @@ export default {
     }
   },
   methods: {
+    selectGet() {
+      console.log("111")
+    },
     drawLine(obj) {
       // 绘制图表
       obj.setOption({

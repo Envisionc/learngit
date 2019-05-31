@@ -28,11 +28,12 @@
                 </vuescroll>
             <!-- </div> -->
         </div>
-        <el-table :data="conditionInfo" style="width: 100%;margin-bottom:55px;margin-top:80px;">
-            <el-table-column  prop="conditionName"  label="档案号" align="center"></el-table-column>
-            <el-table-column  prop="conditionTemp" label="题名" align="center"></el-table-column>
-            <el-table-column  prop="recondingTime"  label="借出时间" align="center"></el-table-column>
-            <el-table-column  prop="operator"  label="归档时间" align="center"></el-table-column>
+        <el-table :data="archivesInfo" style="width: 100%;margin-bottom:55px;margin-top:80px;">
+            <el-table-column  prop="fileNumber"  label="档案号" align="center"></el-table-column>
+            <el-table-column  prop="archivesTitle" label="题名" align="center"></el-table-column>
+            <el-table-column  prop="loanTime"  label="借出时间" align="center"></el-table-column>
+            <el-table-column  prop="archiveTime"  label="归档时间" align="center"></el-table-column>
+            <el-table-column  prop="operator"  label="操作人" align="center"></el-table-column>
         </el-table>
         <div class="pagin">
             <span class="total">共{{totalCount}}条数据</span>
@@ -93,15 +94,7 @@ export default {
                 {
                     id: 1,
                     date: '近七天'
-                },
-                {
-                    id: 3,
-                    date: '近十五天'
-                },
-                {
-                    id: 4,
-                    date: '近一个月'
-                },
+                }
             ],
             archivesInfo: [
                 {
@@ -110,41 +103,47 @@ export default {
                     loanTime: '2019-02-14 18:25:08',   //借出时间
                     archiveTime: '2019-02-17 18:25:08', //归档时间
                     state: 0,    //状态 0--借出  1---归档
+                    operator: '张晓刚'
                 },
                 {
                     fileNumber: '#15121', //档案号
-                    archivesTitle: '',  //档案题名
+                    archivesTitle: '孔府档案选编',  //档案题名
                     loanTime: '2019-02-14 18:25:08',   //借出时间
                     archiveTime: '2019-02-17 18:25:08', //归档时间
                     state: 1,    //状态
+                    operator: '程大开'
                 },
                 {
                     fileNumber: '#12301', //档案号
-                    archivesTitle: '',  //档案题名
+                    archivesTitle: '孔府档案的法律史料价值研究',  //档案题名
                     loanTime: '2019-02-14 18:25:08',   //借出时间
                     archiveTime: '2019-02-17 18:25:08', //归档时间
                     state: 1,    //状态
+                    operator: '刘哲思'
                 },
                 {
                     fileNumber: '#12351', //档案号
-                    archivesTitle: '',  //档案题名
+                    archivesTitle: '孔府档案的由来',  //档案题名
                     loanTime: '2019-02-14 18:25:08',   //借出时间
                     archiveTime: '2019-02-17 18:25:08', //归档时间
                     state: 0,    //状态
+                    operator: '朱小军'
                 },
                 {
                     fileNumber: '#45121', //档案号
-                    archivesTitle: '',  //档案题名
+                    archivesTitle: '孔府档案的法律史料价值研究',  //档案题名
                     loanTime: '2019-02-14 18:25:08',   //借出时间
                     archiveTime: '2019-02-17 18:25:08', //归档时间
                     state: 1,    //状态
+                    operator: '王宇恒'
                 },
                 {
                     fileNumber: '#24121', //档案号
-                    archivesTitle: '',  //档案题名
+                    archivesTitle: '孔府档案概述',  //档案题名
                     loanTime: '2019-02-14 18:25:08',   //借出时间
                     archiveTime: '2019-02-17 18:25:08', //归档时间
                     state: 0,    //状态
+                    operator: '马谡年'
                 }
             ],
             ops: {  //滚动条参数配置
@@ -170,6 +169,9 @@ export default {
     components: {
         vuescroll,
         imageSnapTimeline
+    },
+    mounted () {
+        this.totalCount = this.archivesInfo.length
     },
     methods: {
         selectTIime () {

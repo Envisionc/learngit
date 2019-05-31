@@ -80,7 +80,7 @@ export default {
 
 <style scoped>
 .contanier {
-    height: calc( 100vh - 80px );
+    height: calc( 100% - 80px );
     background: #f3f3f3;
 }
 .content {

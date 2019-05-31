@@ -2,7 +2,7 @@
     <div class="contanier">
         <div class="content">
             <div class="select-option">
-                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                <el-select @change="selectGet" v-model="form.region">
                     <el-option 
                         v-for="item in selectList" 
                         :key="item.id"
@@ -46,7 +46,7 @@ export default {
                 },
             ],
             form: {
-                region: ''
+                region: '库房一'
             },
             roomList: [
                 {
@@ -80,7 +80,7 @@ export default {
 
 <style scoped>
 .contanier {
-    height: calc( 100vh - 80px );
+    height: calc( 100% - 80px );
     background: #f3f3f3;
 }
 .content {

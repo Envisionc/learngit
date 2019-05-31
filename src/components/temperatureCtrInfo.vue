@@ -2,14 +2,14 @@
     <div class="con-item">
         <div class="time-line">
             <div class="time-query">
-                <el-select class="query" @change="selectTIime" v-model="airConditionerList[0].conditionName" placeholder="请选择库房">
+                <!-- <el-select class="query" @change="selectTIime" v-model="airConditionerList[0].conditionName" placeholder="请选择库房">
                     <el-option 
                         v-for="item in airConditionerList" 
                         :key="item.id"
                         :label="item.conditionName"
                         :value="item.id"
                     ></el-option>
-                </el-select>
+                </el-select> -->
                 <el-select @change="selectTIime" v-model="form.region" placeholder="请选择库房">
                     <el-option 
                         v-for="item in dateList" 
@@ -100,15 +100,7 @@ export default {
                 {
                     id: 1,
                     date: '近七天'
-                },
-                {
-                    id: 3,
-                    date: '近十五天'
-                },
-                {
-                    id: 4,
-                    date: '近一个月'
-                },
+                }
             ],
             airConditionerList: [
                 {

@@ -14,11 +14,12 @@
             <div class="tab-page">
                 <el-tabs type="border-card">
                     <el-tab-pane v-for="(item,index) in roomList" :key="index" :label="item.name">
-                        <div class="tab-content" v-if="index == 0">
+                        <temperatureCtrInfo />
+                        <!-- <div class="tab-content" v-if="index == 0">
                             <temperatureCtrInfo />
                         </div>
                         <div class="tab-content" v-if="index == 1">我是房间二</div>
-                        <div class="tab-content" v-if="index == 2">我是房间三</div>
+                        <div class="tab-content" v-if="index == 2">我是房间三</div> -->
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -46,20 +47,20 @@ export default {
                 },
             ],
             form: {
-                region: ''
+                region: '库房一'
             },
             roomList: [
                 {
                     id: 0,
-                    name: '东一房'
+                    name: '西一楼001室'
                 },
                 {
                     id: 1,
-                    name: '北三房'
+                    name: '西一楼002室'
                 },
                 {
                     id: 2,
-                    name: '南一房'
+                    name: '西一楼003室'
                 },
             ]
         }

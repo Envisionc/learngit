@@ -42,20 +42,14 @@ export default {
     border: 1px solid #eee;
     box-sizing: border-box;
     cursor: pointer;
-    /* overflow: scroll; */
 }
 .timeline-item {
     height: 100%;
-    /* display:table-cell;
-    vertical-align: middle; */
     display: flex;
     justify-content: flex-start;
     align-items: center;
     position: relative;
 }
-/* .timeline-item:nth-of-type(1) {
-    padding-left: 60px;
-} */
 .camera-img {
     width: 24px;
     height: 24px;

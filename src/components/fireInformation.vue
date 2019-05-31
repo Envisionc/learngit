@@ -2,7 +2,7 @@
     <div class="con-item">
         <div class="time-line">
             <div class="time-query">
-                <el-select @change="selectTIime" v-model="form.region" placeholder="请选择库房">
+                <el-select @change="selectTIime" v-model="form.region">
                     <el-option 
                         v-for="item in dateList" 
                         :key="item.id"
@@ -15,12 +15,11 @@
             <!-- <div class="vuescroll-box"> -->
                 <vuescroll :ops="ops">
                     <div class="timeline-box">
-                        <div class="timeline-item" v-for="(item, index) in archivesInfo" :key="index">
+                        <div class="timeline-item" v-for="(item, index) in equipStatusInfo" :key="index">
                             <div class="warning-icon" ref="scaleImg" v-if="item.state == 1" @mousemove="scaleout(index)" @mouseout="scalein(index)"></div>
                             <div class="success-icon" ref="scaleImg" v-if="item.state == 0" @mousemove="scaleout(index)" @mouseout="scalein(index)"></div>
-                            <div class="line" :style="{visibility:index == (archivesInfo.length - 1) ? 'hidden': 'visible'}"></div>
-                            <p class="date-text" v-if="item.state == 0">{{ item.loanTime }}</p>
-                            <p class="date-text" v-if="item.state == 1">{{ item.archiveTime }}</p>
+                            <div class="line" :style="{visibility:index == (equipStatusInfo.length - 1) ? 'hidden': 'visible'}"></div>
+                            <p class="date-text">{{ item.recondingTime }}</p>
                             <p class="operator" v-if="item.state == 0">正常</p>
                             <p class="operator" v-if="item.state == 1">异常</p>
                         </div>
@@ -54,27 +53,119 @@ import imageSnapTimeline from '@/components/imageSnapTimeline';
 export default {
     data() {
         return {
-            equipmentInfo: [
+            equipmentInfo: [],
+            equipmentInfo0: [
                 {
                     equipmentName: '空调',
                     recondingTime: '2019-05-21 10:08:56',
                     equipmentState: '正常',
-                    localtion: '001室'
+                    localtion: '001室',
+                    state: 0,    //状态 0--正常  1---异常
                 }, {
                     equipmentName: '灯',
                     recondingTime: '2019-05-21 10:08:56',
                     equipmentState: '异常',
-                    localtion: '001室'
+                    localtion: '001室',
+                    state: 1,
                 }, {
                     equipmentName: '门',
                     recondingTime: '2019-05-21 10:08:56',
                     equipmentState: '正常',
-                    localtion: '001室'
+                    localtion: '001室',
+                    state: 0,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
                 }, {
                     equipmentName: '窗帘',
                     recondingTime: '2019-05-21 10:08:56',
                     equipmentState: '正常',
-                    localtion: '001室'
+                    localtion: '001室',
+                    state: 0,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
+                }
+            ],
+            equipmentInfo1: [
+                {
+                    equipmentName: '空调',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '正常',
+                    localtion: '001室',
+                    state: 0,    //状态 0--正常  1---异常
+                }, {
+                    equipmentName: '灯',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
+                }, {
+                    equipmentName: '门',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '正常',
+                    localtion: '001室',
+                    state: 0,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '正常',
+                    localtion: '001室',
+                    state: 0,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
+                }, {
+                    equipmentName: '空调',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '正常',
+                    localtion: '001室',
+                    state: 0,    //状态 0--正常  1---异常
+                }, {
+                    equipmentName: '灯',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
+                }, {
+                    equipmentName: '门',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '正常',
+                    localtion: '001室',
+                    state: 0,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '正常',
+                    localtion: '001室',
+                    state: 0,
+                }, {
+                    equipmentName: '窗帘',
+                    recondingTime: '2019-05-21 10:08:56',
+                    equipmentState: '异常',
+                    localtion: '001室',
+                    state: 1,
                 }
             ],
             currImage: '',
@@ -93,60 +184,9 @@ export default {
                 {
                     id: 1,
                     date: '近七天'
-                },
-                {
-                    id: 3,
-                    date: '近十五天'
-                },
-                {
-                    id: 4,
-                    date: '近一个月'
-                },
-            ],
-            archivesInfo: [
-                {
-                    fileNumber: '', //档案号
-                    archivesTitle: '《孔府档案选》',  //档案题名
-                    loanTime: '2019-02-14 18:25:08',   //借出时间
-                    archiveTime: '2019-02-17 18:25:08', //归档时间
-                    state: 0,    //状态 0--借出  1---归档
-                },
-                {
-                    fileNumber: '#15121', //档案号
-                    archivesTitle: '',  //档案题名
-                    loanTime: '2019-02-14 18:25:08',   //借出时间
-                    archiveTime: '2019-02-17 18:25:08', //归档时间
-                    state: 1,    //状态
-                },
-                {
-                    fileNumber: '#12301', //档案号
-                    archivesTitle: '',  //档案题名
-                    loanTime: '2019-02-14 18:25:08',   //借出时间
-                    archiveTime: '2019-02-17 18:25:08', //归档时间
-                    state: 1,    //状态
-                },
-                {
-                    fileNumber: '#12351', //档案号
-                    archivesTitle: '',  //档案题名
-                    loanTime: '2019-02-14 18:25:08',   //借出时间
-                    archiveTime: '2019-02-17 18:25:08', //归档时间
-                    state: 0,    //状态
-                },
-                {
-                    fileNumber: '#45121', //档案号
-                    archivesTitle: '',  //档案题名
-                    loanTime: '2019-02-14 18:25:08',   //借出时间
-                    archiveTime: '2019-02-17 18:25:08', //归档时间
-                    state: 1,    //状态
-                },
-                {
-                    fileNumber: '#24121', //档案号
-                    archivesTitle: '',  //档案题名
-                    loanTime: '2019-02-14 18:25:08',   //借出时间
-                    archiveTime: '2019-02-17 18:25:08', //归档时间
-                    state: 0,    //状态
                 }
             ],
+            equipStatusInfo: [],
             ops: {  //滚动条参数配置
                 bar: {  
                     showDelay: 500,
@@ -171,9 +211,21 @@ export default {
         vuescroll,
         imageSnapTimeline
     },
+    mounted () {
+        this.equipmentInfo = this.equipmentInfo0
+        this.equipStatusInfo = this.equipmentInfo0
+        this.totalCount = this.equipmentInfo.length
+    },
     methods: {
-        selectTIime () {
-            console.log("111")
+        selectTIime (n) {
+            if (n == 0) {
+                this.equipmentInfo = this.equipmentInfo0
+                this.equipStatusInfo = this.equipmentInfo0
+            } else if (n == 1) {
+                this.equipmentInfo = this.equipmentInfo1
+                this.equipStatusInfo = this.equipmentInfo1
+            }
+            this.totalCount = this.equipmentInfo.length
         },
         scaleout (index) {
             // console.log(index)
