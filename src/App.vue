@@ -31,6 +31,7 @@ export default {
 *
   margin 0px
   padding 0px
+  box-sizing border-box
 ul,li
   list-style none
   padding 0

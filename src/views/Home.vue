@@ -64,17 +64,21 @@
               <div class="run-day-text">天</div>
             </div>
           </div>
+          <div class="scanning">
+            <div class="radar"></div>
+          </div>
           <div class="popup-warning">
-            <div class="popup-box"></div>
-            <div class="popup-box"></div>
+            
+            <!-- <div class="popup-box"></div> -->
+            <!-- <div class="popup-box"></div> -->
           </div>
         </div>
         <div class="middle-item">
           <div class="tempt-box-one">
             <div id="pie1" style="width: 240px; height: 240px;"></div>
-            <p class="room-title">房间一</p>
+            <!-- <p class="room-title">房间一</p> -->
           </div>
-          <div class="tempt-box-one">
+          <div class="tempt-box-two">
             <!-- <div id="v1">
               <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
                 <el-option 
@@ -85,7 +89,7 @@
                 ></el-option>
               </el-select>
             </div> -->
-            <div id="usingStatistical" style="width: 300px; height: 240px;"></div>
+            <div id="usingStatistical" style="width: 400px; height: 240px;"></div>
             <!-- <p class="room-title">房间二</p> -->
           </div>
         </div>
@@ -411,7 +415,8 @@ export default {
           axisLabel: {
             show: true,
               textStyle: {
-                color: '#c3dbff',  //更改坐标轴文字颜色
+                // color: '#c3dbff',  //更改坐标轴文字颜色
+                color: '#6495ED',  //更改坐标轴文字颜色
                 fontSize : 12      //更改坐标轴文字大小
               }
           },
@@ -420,24 +425,36 @@ export default {
           },
           axisLine:{
             lineStyle:{
-                // color:'#315070' //更改坐标轴颜色
-                color:'#fff' //更改坐标轴颜色
+                color:'#315070' //更改坐标轴颜色
+                // color:'#fff' //更改坐标轴颜色
             }
           }
         },
         yAxis: {
           axisLine:{
             lineStyle:{
-                // color:'#315070' //更改坐标轴颜色
-                color:'#fff' //更改坐标轴颜色
+                color:'#315070' //更改坐标轴颜色
+                // color:'#fff' //更改坐标轴颜色
             }
           }
         },
         series: [{
-          color: ['#1a68ff'],
+          color: ['#1a681f'],
           name: '借阅量',
           type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
+          data: [5, 20, 36, 10, 10, 20],
+          itemStyle: {
+            normal: {
+                color: new echarts.graphic.LinearGradient(
+                    0, 0, 0, 1,
+                    [
+                        {offset: 0, color: '#0154be'},
+                        // {offset: 0.5, color: '#188df0'},
+                        {offset: 1, color: '#188df0'}
+                    ]
+                )
+            },
+          }
         }]
       });
     },
@@ -892,11 +909,83 @@ export default {
             margin-right 10px
           .run-day-text
             color #388ca0
+      .scanning
+        width 100%
+        height 300px
+        .radar
+          background -webkit-radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%), -webkit-repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, #20ff4d 18.6%, rgba(32, 255, 77, 0) 18.9%), -webkit-linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%), -webkit-linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%)
+          // background radial-gradient(center, rgba(32, 255, 77, 0.3) 0%, rgba(32, 255, 77, 0) 75%), repeating-radial-gradient(rgba(32, 255, 77, 0) 5.8%, rgba(32, 255, 77, 0) 18%, #20ff4d 18.6%, rgba(32, 255, 77, 0) 18.9%), linear-gradient(90deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%), linear-gradient(0deg, rgba(32, 255, 77, 0) 49.5%, #20ff4d 50%, #20ff4d 50%, rgba(32, 255, 77, 0) 50.2%)
+          width: 240px;
+          height: 240px;
+          max-height: 240px;
+          max-width: 240px;
+          position: relative;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          border-radius: 50%;
+          border: 0.2rem solid #20ff4d;
+          overflow: hidden;
+          &::before
+            content: ' ';
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: blips 5s infinite;
+            animation-timing-function: linear;
+            animation-delay: 1.4s;
+          &::after
+            content: ' ';
+            display: block;
+            background-image: linear-gradient(44deg, rgba(0, 255, 51, 0) 50%, #00ff33 100%);
+            width: 50%;
+            height: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: radar-beam 5s infinite;
+            animation-timing-function: linear;
+            transform-origin: bottom right;
+            border-radius: 100% 0 0 0;
+            @keyframes radar-beam {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
+            }
+            @keyframes blips {
+              14% {
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+              }
+              14.0002% {
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+              }
+              25% {
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 56% 86%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+              }
+              26% {
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 56% 86%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+                opacity: 1;
+              }
+              100% {
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 56% 86%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+                opacity: 0;
+              }
+            }
       .popup-warning
-        width 450px
+        width 200px
+        height 250px
         padding 20px
+        border 1px solid #197899
+        background #0b2231
+        opacity 0.5
         position absolute
-        left 50%
+        top 28%
+        left 82%
         transform translateX(-50%)
         overflow hidden
         box-sizing border-box
@@ -917,6 +1006,12 @@ export default {
       display flex
       border 1px solid #043778
       box-sizing border-box
+      .tempt-box-one
+        padding-top 40px
+        box-sizing border-box
+      .tempt-box-two
+        padding-top 40px
+        box-sizing border-box
   .right
     padding-left 0
     padding-right 20px
@@ -924,8 +1019,8 @@ export default {
       background url('../assets/框002.png') no-repeat center
       background-size 100% 100%
     .video-box
-      width 330px
-      height 180px
+      width 360px
+      height 220px
       padding-top 40px
       padding-left 30px
       box-sizing border-box
@@ -977,173 +1072,5 @@ export default {
                 background rgba(3,42,68,.5)
               .odd
                 background rgba(3,42,68,1)
-  // .v-row
-  //   display flex
-  //   margin-top 30px
-  //   .v-td 
-  //     // flex 1
-  //     padding 0 20px
-  //     &:nth-of-type(2)
-  //       padding: 0 
-  //     &:nth-of-type(3) 
-  //       margin-right 0
-  //     .safe-title
-  //       font-size 16px
-  //       margin-bottom 20px
-  //     #safe
-  //       width 360px
-  //       height 220px
-  //       position relative
-  //       // padding 20px
-  //       box-sizing border-box
-  //       // border 2px solid #263fa3
-  //       // border-radius 4px
-  //       display flex
-  //       justify-content center
-  //       align-items center
-  //       // background url('../assets/框002.png') no-repeat center
-  //       // background-size contain
-  //       .kuang-one
-  //         width 100%
-  //         height 100%
-  //         display block
-  //         position absolute
-  //         top 0
-  //         left 0
-  //       .list-images
-  //         // width 100%
-  //         // height 100%
-          
-  //         box-sizing border-box
-  //         .item-image
-  //           width 80px
-  //           height 80px
-  //           float left
-  //           margin-right 15px
-  //           margin-bottom 10px
-  //           ._img
-  //             width 80px
-  //             height 80px
-  //             display block
-  //     .video-box
-  //       height 300px
-  //       margin-top 100px
-  //       .my-video
-  //         width 100%
-  //         height 100%
-  //         object-fit fill;
-  //     .v-item
-  //       width 100%
-  //       height 400px
-  //       display flex
-  //       justify-content center
-  //       align-items center
-  //       border-radius 4px
-  //       box-sizing border-box
-  //       border 2px solid #263fa3
-  //       .tempt-box-one
-  //         position relative
-  //         .room-title
-  //           width 100%
-  //           height 24px
-  //           position absolute
-  //           left 0
-  //           bottom 30px
-  //           text-align center
-  //           font-size 14px
-  //           color #ffffff
-  //       .time-line-container
-  //         color: #1DD8FE;
-  //         font-size: 16px;
-  //         font-family: "Helvetica Neue For Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  //         box-sizing: border-box;
-  //         position: relative;
-  //         list-style: none;
-  //         margin: 0.5rem;
-  //         padding-left: 6rem;
-  //         &::after
-  //           position: absolute;
-  //           content: "";
-  //           left: 5rem;
-  //           top: 0;
-  //           width: 2px;
-  //           height: 100%;
-  //           background-color: #fe4f16
-  //         .time-line-item
-  //           padding: 1rem
-  //           position: relative
-  //           .time-item-tag
-  //             position: absolute
-  //             left: -10rem
-  //             // width: 65px
-  //             text-align: center
-  //             color: #5EBCF7
-  //             font-size: 14px
-  //           .time-item-symbol
-  //             box-sizing: border-box
-  //             position: absolute
-  //             left: -1rem
-  //             z-index: 1
-  //             background: white
-  //             .time-item-icon
-  //               box-sizing: border-box
-  //               position: absolute
-  //               margin-left: -11px
-  //               width: 24px
-  //               height: 24px
-  //               border-radius: 12px
-  //               border: 2px solid #fe4f16
-  //             .default
-  //               background: #51F7D6
-  //             .warning
-  //               background red
-  //             .out
-  //               background: white
-  //             .in
-  //               background: black
-  //           .time-item-content
-  //             white-space: pre-line
-
-  //       .archival-data
-  //         width: 100%
-  //         height 100%
-  //       .v-table
-  //         width 400px
-  //         height 300px
-  //         border 1px solid #0c3548
-  //         box-sizing border-box
-  //         .table-th
-  //           height 40px
-  //           display flex
-  //           justify-content flex-start
-  //           align-items center
-  //           color #2c91a9
-  //           .table-th-item
-  //             flex 1
-  //         .table-body
-  //           height 260px
-  //           overflow auto
-  //           box-sizing border-box
-  //           .table-body-item
-  //             height 40px
-  //             border-bottom 1px solid #0c3548
-  //             box-sizing border-box
-  //             .table-con
-  //               height 40px
-  //               .item-ul
-  //                 height 100%
-  //                 display flex
-  //                 justify-content flex-start
-  //                 align-items center
-  //                 .item-li
-  //                   color #2c91a9
-  //                   overflow hidden
-  //                   white-space nowrap
-  //                   text-overflow ellipsis
-  //                   flex 1
-  //               .even
-  //                 background rgba(3,42,68,.5)
-  //               .odd
-  //                 background rgba(3,42,68,1)
 
 </style>

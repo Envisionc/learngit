@@ -229,6 +229,7 @@ export default {
 .contanier {
     height: calc( 100% - 80px );
     background: #f3f3f3;
+    background: -webkit-radial-gradient()
 }
 .content {
     width: 100%;
