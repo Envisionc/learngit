@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="v-header">
+    <!-- <div class="v-header">
       <div class="v-title">智慧库房大数据平台</div>
       <div id="nav">
         <router-link to="/">首页</router-link> |
@@ -13,7 +13,7 @@
         <router-link to="/fireControl">消防</router-link> |
         <router-link to="/usageStatistics">利用统计</router-link>
       </div>
-    </div>
+    </div> -->
     <router-view/>
   </div>
 </template>
@@ -59,29 +59,29 @@ ul,li
     top 0
     left 0
     z-index -1
-  .v-header
-    height 80px
-    display flex
-    justify-content flex-start
-    box-sizing border-box
-    border-bottom 1px solid #023f99
-    background #062a47
-    .v-title
-      padding 0px 60px
-      font-size 20px
-      color #ffffff
-      font-weight 600
-      line-height 80px
-    #nav
-      padding 30px
-      a
-        font-weight bold
-        font-size 16px
-        color #fff
-        text-decoration none
-        padding 0 15px
-        &.router-link-exact-active
-          color #23BCF8
+  // .v-header
+  //   height 80px
+  //   display flex
+  //   justify-content flex-start
+  //   box-sizing border-box
+  //   border-bottom 1px solid #023f99
+  //   background #062a47
+  //   .v-title
+  //     padding 0px 60px
+  //     font-size 20px
+  //     color #ffffff
+  //     font-weight 600
+  //     line-height 80px
+  //   #nav
+  //     padding 30px
+  //     a
+  //       font-weight bold
+  //       font-size 16px
+  //       color #fff
+  //       text-decoration none
+  //       padding 0 15px
+  //       &.router-link-exact-active
+  //         color #23BCF8
   .v-content
     // background rgba(8,35,74, .8)
     // background url('assets/warehouse_bg.jpg') no-repeat center

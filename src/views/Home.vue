@@ -1,184 +1,187 @@
 <template>
-  <div class="home">
-    <img class="container-bg" src="../assets/warehouse_bg.jpg" alt="">
-    <div class="container">
-      <div class="left">
-        <div id="safe" class="item have-bg">
-          <h6 class="item-title">设备状态</h6>
-          <div class="circle-chart">
-            <div class="donut-chart">
-              <div class="progress-circle">
-                <svg :width="radiusW" :height="radiusH" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">  
-                    <!-- width/height表示svg的宽高,viewBox表示根据svg的宽高拉出来的大小 -->  
-                    <circle class="progress-background" r="50" cx="50" cy="50" stroke-width="4.8" fill="transparent" />  
-                    <!-- r表示半径，cx 和 cy 属性定义圆点的 x 和 y 坐标 fill表示背景色 -->  
-                    <circle stroke-linecap="round" class="progress-bar" r="50" cx="50" cy="50" stroke-width="4.8" fill="transparent" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset" style="transition: stroke-dashoffset 0.6s ease 0s"/>  
-                </svg>
-                <div class="equipment-info">
-                    <div class="enable-rate-text">启用率</div>
-                    <div class="rate"><span>{{ rate }}</span><span>%</span></div>
-                    <div class="equipment-sum">总数: {{ currEquiqSum }}</div>
+  <div class="Home">
+    <topHeader />
+    <div class="home">
+      <img class="container-bg" src="../assets/warehouse_bg.jpg" alt="">
+      <div class="container">
+        <div class="left">
+          <div id="safe" class="item have-bg">
+            <h6 class="item-title">设备状态</h6>
+            <div class="circle-chart">
+              <div class="donut-chart">
+                <div class="progress-circle">
+                  <svg :width="radiusW" :height="radiusH" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">  
+                      <!-- width/height表示svg的宽高,viewBox表示根据svg的宽高拉出来的大小 -->  
+                      <circle class="progress-background" r="50" cx="50" cy="50" stroke-width="4.8" fill="transparent" />  
+                      <!-- r表示半径，cx 和 cy 属性定义圆点的 x 和 y 坐标 fill表示背景色 -->  
+                      <circle stroke-linecap="round" class="progress-bar" r="50" cx="50" cy="50" stroke-width="4.8" fill="transparent" :stroke-dasharray="dashArray" :stroke-dashoffset="dashOffset" style="transition: stroke-dashoffset 0.6s ease 0s"/>  
+                  </svg>
+                  <div class="equipment-info">
+                      <div class="enable-rate-text">启用率</div>
+                      <div class="rate"><span>{{ rate }}</span><span>%</span></div>
+                      <div class="equipment-sum">总数: {{ currEquiqSum }}</div>
+                  </div>
                 </div>
               </div>
+              <div class="tab-list">
+                <div :class="item.isActive ? 'tab-item active' : 'tab-item'" @mousemove="selectEquiq(item)" v-for="(item, index) in equiqList" :key="index">{{ item.name }}</div>
+              </div>
             </div>
-            <div class="tab-list">
-              <div :class="item.isActive ? 'tab-item active' : 'tab-item'" @mousemove="selectEquiq(item)" v-for="(item, index) in equiqList" :key="index">{{ item.name }}</div>
+          </div>
+          <div class="item have-bg">
+            <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+            <h6 class="item-title">电子标签进出记录</h6>
+            <div class="time-rfid">
+              <ul class="list-rfid">
+                <li class="item-rfid"  v-for="(item,index) in items" :key="index">
+                    <div class="rfid-left">{{ item.tag }}</div>
+                    <div class="rfid-center">
+                        <div class="line"></div>
+                        <div class="circle in" v-if="item.status == 0" ref="circle" @mousemove="scalein(index)" @mouseout="scaleout(index)"></div>
+                        <div class="circle out" v-if="item.status == 1" ref="circle" @mousemove="scalein(index)" @mouseout="scaleout(index)"></div>
+                    </div>
+                    <div class="rfid-right">{{ item.content }}</div>
+                </li>
+              </ul>
+            </div>
+            <!-- <ul class="time-line-container">
+              <li class="time-line-item" v-for="(item,index) in items" :key="index">
+                <div class="time-item-tag">{{ item.tag }}</div>
+                <div class="time-item-symbol">
+                  <div v-if="item.status == 0" class="time-item-icon in"></div>
+                  <div v-else class="time-item-icon out"></div>
+                </div>
+                <div class="time-item-content">{{ item.content }}</div>
+              </li>
+            </ul> -->
+          </div>
+          <div class="item have-bg">
+            <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+            <h6 class="item-title">库房档案数量统计</h6>
+            <div class="archival-box">
+              <!-- 柱状图 -->
+              <!-- <div id="archival" class="archival" style="width:300px; height: 180px"></div> -->
+              <!-- 饼状图 -->
+              <div id="archival" class="archival" style="width:300px; height: 180px"></div>
             </div>
           </div>
         </div>
-        <div class="item have-bg">
-          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-          <h6 class="item-title">电子标签进出记录</h6>
-          <div class="time-rfid">
-            <ul class="list-rfid">
-              <li class="item-rfid"  v-for="(item,index) in items" :key="index">
-                  <div class="rfid-left">{{ item.tag }}</div>
-                  <div class="rfid-center">
-                      <div class="line"></div>
-                      <div class="circle in" v-if="item.status == 0" ref="circle" @mousemove="scalein(index)" @mouseout="scaleout(index)"></div>
-                      <div class="circle out" v-if="item.status == 1" ref="circle" @mousemove="scalein(index)" @mouseout="scaleout(index)"></div>
-                  </div>
-                  <div class="rfid-right">{{ item.content }}</div>
+        <div class="middle">
+          <div class="middle-show">
+            <img class="middle-bg" src="../assets/kuang-middle.png" alt="">
+            <div class="run-days">
+              <p class="run-text">安全运行天数</p>
+              <div class="run-day-box">
+                <div class="run-day-item">0</div>
+                <div class="run-day-item">1</div>
+                <div class="run-day-item">5</div>
+                <div class="run-day-item">3</div>
+                <div class="run-day-text">天</div>
+              </div>
+            </div>
+            <div class="scanning">
+              <div class="radar"></div>
+            </div>
+            <div class="popup-warning">
+              <div class="e-loadholder">
+                <div class="m-loader">
+                  <span class="e-text">
+                    <div class="equip-warning">
+                      <img class="warning-icon" src="../assets/image/jinggao.png">
+                      <div class="equip">空调</div>
+                      <div class="equip-temp">温度过高</div>
+                      <div class="create-time">2019-05-24 16:30:48</div>
+                    </div>
+                  </span>
+                </div>
+              </div>
+              <!-- <div class="popup-box"></div> -->
+              <!-- <div class="popup-box"></div> -->
+            </div>
+          </div>
+          <div class="middle-item">
+            <div class="tempt-box-one">
+              <div id="pie1" style="width: 240px; height: 240px;"></div>
+              <!-- <p class="room-title">房间一</p> -->
+            </div>
+            <div class="tempt-box-two">
+              <!-- <div id="v1">
+                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                  <el-option 
+                      v-for="item in selectList" 
+                      :key="item.id"
+                      :label="item.name"
+                      :value="item.id"
+                  ></el-option>
+                </el-select>
+              </div> -->
+              <div id="usingStatistical" style="width: 400px; height: 240px;"></div>
+              <!-- <p class="room-title">房间二</p> -->
+            </div>
+          </div>
+        </div>
+        <div class="right">
+          <div class="item have-bg">
+            <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+            <h6 class="item-title">实时监控</h6>
+            <div class="video-box">
+              <video class="my-video" controls="controls" loop="loop">
+                <source src="../assets/test02.mp4" type="video/mp4" >
+              </video>
+            </div>
+          </div>
+          <div class="item have-bg">
+            <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+            <h6 class="item-title">安防监控</h6>
+            <ul class="item-images clearfix">
+              <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
+                <img class="_img" :src="item.url" :alt="'img-' + index" >
               </li>
             </ul>
+            <!-- <ul class="time-line-container">
+              <li class="time-line-item" v-for="(item,index) in messageData" :key="index">
+                <div class="time-item-tag">{{ item.tag }}</div>
+                <div class="time-item-symbol">
+                  <div v-if="item.status == 0" class="time-item-icon warning"></div>
+                  <div v-else class="time-item-icon default"></div>
+                </div>
+                <div class="time-item-content">{{ item.content }}</div>
+              </li>
+            </ul> -->
           </div>
-          <!-- <ul class="time-line-container">
-            <li class="time-line-item" v-for="(item,index) in items" :key="index">
-              <div class="time-item-tag">{{ item.tag }}</div>
-              <div class="time-item-symbol">
-                <div v-if="item.status == 0" class="time-item-icon in"></div>
-                <div v-else class="time-item-icon out"></div>
-              </div>
-              <div class="time-item-content">{{ item.content }}</div>
-            </li>
-          </ul> -->
-        </div>
-        <div class="item have-bg">
-          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-          <h6 class="item-title">库房档案数量统计</h6>
-          <div class="archival-box">
-            <!-- 柱状图 -->
-            <!-- <div id="archival" class="archival" style="width:300px; height: 180px"></div> -->
-            <!-- 饼状图 -->
-            <div id="archival" class="archival" style="width:300px; height: 180px"></div>
-          </div>
-        </div>
-      </div>
-      <div class="middle">
-        <div class="middle-show">
-          <img class="middle-bg" src="../assets/kuang-middle.png" alt="">
-          <div class="run-days">
-            <p class="run-text">安全运行天数</p>
-            <div class="run-day-box">
-              <div class="run-day-item">0</div>
-              <div class="run-day-item">1</div>
-              <div class="run-day-item">5</div>
-              <div class="run-day-item">3</div>
-              <div class="run-day-text">天</div>
-            </div>
-          </div>
-          <div class="scanning">
-            <div class="radar"></div>
-          </div>
-          <div class="popup-warning">
-            <div class="e-loadholder">
-              <div class="m-loader">
-                <span class="e-text">
-                  <div class="equip-warning">
-                    <img class="warning-icon" src="../assets/image/jinggao.png">
-                    <div class="equip">空调</div>
-                    <div class="equip-temp">温度过高</div>
-                    <div class="create-time">2019-05-24 16:30:48</div>
-                  </div>
-                </span>
-              </div>
-            </div>
-            <!-- <div class="popup-box"></div> -->
-            <!-- <div class="popup-box"></div> -->
-          </div>
-        </div>
-        <div class="middle-item">
-          <div class="tempt-box-one">
-            <div id="pie1" style="width: 240px; height: 240px;"></div>
-            <!-- <p class="room-title">房间一</p> -->
-          </div>
-          <div class="tempt-box-two">
-            <!-- <div id="v1">
-              <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
-                <el-option 
-                    v-for="item in selectList" 
-                    :key="item.id"
-                    :label="item.name"
-                    :value="item.id"
-                ></el-option>
-              </el-select>
-            </div> -->
-            <div id="usingStatistical" style="width: 400px; height: 240px;"></div>
-            <!-- <p class="room-title">房间二</p> -->
-          </div>
-        </div>
-      </div>
-      <div class="right">
-        <div class="item have-bg">
-          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-          <h6 class="item-title">实时监控</h6>
-          <div class="video-box">
-            <video class="my-video" controls="controls" loop="loop">
-              <source src="../assets/test02.mp4" type="video/mp4" >
-            </video>
-          </div>
-        </div>
-        <div class="item have-bg">
-          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-          <h6 class="item-title">安防监控</h6>
-          <ul class="item-images clearfix">
-            <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
-              <img class="_img" :src="item.url" :alt="'img-' + index" >
-            </li>
-          </ul>
-          <!-- <ul class="time-line-container">
-            <li class="time-line-item" v-for="(item,index) in messageData" :key="index">
-              <div class="time-item-tag">{{ item.tag }}</div>
-              <div class="time-item-symbol">
-                <div v-if="item.status == 0" class="time-item-icon warning"></div>
-                <div v-else class="time-item-icon default"></div>
-              </div>
-              <div class="time-item-content">{{ item.content }}</div>
-            </li>
-          </ul> -->
-        </div>
-        <div class="item have-bg">
-          <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-          <h6 class="item-title">消防实时消息</h6>
-          <div class="table-item">
-            <div class="v-table">
-              <ul class="table-th">
-                <li class="table-th-item">时间</li>
-                <li class="table-th-item">设备</li>
-                <li class="table-th-item">状态</li>
-                <li class="table-th-item">位置</li>
-              </ul>
-              <div class="table-body">
-                <vuescroll :ops="ops">
-                  <div class="table-body-item">
-                    <div class="table-con" v-for="(item,index) in warningData" :key="index">
-                      <ul class="item-ul even" v-if="index % 2 == 0">
-                        <li class="item-li">{{ item.time }}</li>
-                        <li class="item-li">{{ item.equipmentNo }}</li>
-                        <li class="item-li" v-if="item.status == 0">正常</li>
-                        <li class="item-li" v-else>不正常</li>
-                        <li class="item-li">{{ item.localtion }}</li>
-                      </ul>
-                      <ul class="item-ul odd" v-else>
-                        <li class="item-li">{{ item.time }}</li>
-                        <li class="item-li">{{ item.equipmentNo }}</li>
-                        <li class="item-li" v-if="item.status == 0">正常</li>
-                        <li class="item-li" v-else>不正常</li>
-                        <li class="item-li">{{ item.localtion }}</li>
-                      </ul>
+          <div class="item have-bg">
+            <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
+            <h6 class="item-title">消防实时消息</h6>
+            <div class="table-item">
+              <div class="v-table">
+                <ul class="table-th">
+                  <li class="table-th-item">时间</li>
+                  <li class="table-th-item">设备</li>
+                  <li class="table-th-item">状态</li>
+                  <li class="table-th-item">位置</li>
+                </ul>
+                <div class="table-body">
+                  <vuescroll :ops="ops">
+                    <div class="table-body-item">
+                      <div class="table-con" v-for="(item,index) in warningData" :key="index">
+                        <ul class="item-ul even" v-if="index % 2 == 0">
+                          <li class="item-li">{{ item.time }}</li>
+                          <li class="item-li">{{ item.equipmentNo }}</li>
+                          <li class="item-li" v-if="item.status == 0">正常</li>
+                          <li class="item-li" v-else>不正常</li>
+                          <li class="item-li">{{ item.localtion }}</li>
+                        </ul>
+                        <ul class="item-ul odd" v-else>
+                          <li class="item-li">{{ item.time }}</li>
+                          <li class="item-li">{{ item.equipmentNo }}</li>
+                          <li class="item-li" v-if="item.status == 0">正常</li>
+                          <li class="item-li" v-else>不正常</li>
+                          <li class="item-li">{{ item.localtion }}</li>
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                </vuescroll>
+                  </vuescroll>
+                </div>
               </div>
             </div>
           </div>
@@ -203,6 +206,7 @@ require('echarts/lib/component/tooltip')
 require('echarts/lib/component/title')
 import vuescroll from 'vuescroll';
 import HelloWorld from '@/components/HelloWorld.vue'
+import topHeader from '@/components/public/topHeader'
 // import Vuetable from '@/components/vuetable'
 import { setInterval } from 'timers';
 require('../assets/css/style.css')
@@ -211,7 +215,8 @@ export default {
   name: 'home',
   components: {
     HelloWorld,
-    vuescroll
+    vuescroll,
+    topHeader
   },
   data() {
     return {
@@ -1169,5 +1174,4 @@ export default {
                 background rgba(3,42,68,.5)
               .odd
                 background rgba(3,42,68,1)
-
 </style>

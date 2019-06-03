@@ -1,32 +1,36 @@
 <template>
-    <div class="contanier">
-        <div class="content">
-            <div class="select-option">
-                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
-                    <el-option 
-                        v-for="item in selectList" 
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
-                    ></el-option>
-                </el-select>
-            </div>
-            <div class="tab-page">
-                <el-tabs type="border-card" @tab-click="handleClick">
-                    <el-tab-pane v-for="(item,index) in roomList" :key="index" :label="item.name">
-                        <div class="tab-content">
-                            <fireInformation />
-                        </div>
-                        <!-- <div class="tab-content" v-if="index == 1">我是房间二</div>
-                        <div class="tab-content" v-if="index == 2">我是房间三</div> -->
-                    </el-tab-pane>
-                </el-tabs>
+    <div class="wrap">
+        <topHeader />
+        <div class="contanier">
+            <div class="content">
+                <div class="select-option">
+                    <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                        <el-option 
+                            v-for="item in selectList" 
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </div>
+                <div class="tab-page">
+                    <el-tabs type="border-card" @tab-click="handleClick">
+                        <el-tab-pane v-for="(item,index) in roomList" :key="index" :label="item.name">
+                            <div class="tab-content">
+                                <fireInformation />
+                            </div>
+                            <!-- <div class="tab-content" v-if="index == 1">我是房间二</div>
+                            <div class="tab-content" v-if="index == 2">我是房间三</div> -->
+                        </el-tab-pane>
+                    </el-tabs>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import topHeader  from '@/components/public/topHeader'
 import fireInformation  from '@/components/fireInformation'
 export default {
     data() {
@@ -65,6 +69,7 @@ export default {
         }
     },
     components: {
+        topHeader,
         fireInformation
     },
     methods: {

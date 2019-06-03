@@ -16,8 +16,8 @@
                 <vuescroll :ops="ops">
                     <div class="timeline-box">
                         <div class="timeline-item" v-for="(item, index) in equipStatusInfo" :key="index">
-                            <div class="warning-icon" ref="scaleImg" v-if="item.state == 1" @mousemove="scaleout(index)" @mouseout="scalein(index)"></div>
-                            <div class="success-icon" ref="scaleImg" v-if="item.state == 0" @mousemove="scaleout(index)" @mouseout="scalein(index)"></div>
+                            <div class="warning-icon" ref="scaleImg" v-if="item.state == 1" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)"></div>
+                            <div class="success-icon" ref="scaleImg" v-if="item.state == 0" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)"></div>
                             <div class="line" :style="{visibility:index == (equipStatusInfo.length - 1) ? 'hidden': 'visible'}"></div>
                             <p class="date-text">{{ item.recondingTime }}</p>
                             <p class="operator" v-if="item.state == 0">正常</p>
@@ -227,19 +227,28 @@ export default {
             }
             this.totalCount = this.equipmentInfo.length
         },
-        scaleout (index) {
-            console.log(index)
-            console.log(this.$refs.scaleImg[index])
-            let nel = this.$refs.scaleImg[index]
-            nel.classList.add('dynamic')
+        // 移入事件
+        scalein (index,state) {
+            if (state == 0) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.add('dynamic-success')
+            } else if (state == 1) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.add('dynamic-warning')
+            }
+            
         },
-        scalein (index) {
-            let nel = this.$refs.scaleImg[index]
-            nel.classList.remove('dynamic')
-            // remove
+        // 移出事件
+        scaleout (index,state) {
+            if (state == 0) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.remove('dynamic-success')
+            } else if (state == 1) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.remove('dynamic-warning')
+            }
         },
         checkSubmember (val,index){
-            console.log(val,index)
             this.currImage = val.snapIamge;
             this.dialogTableVisible = true
         },
@@ -308,23 +317,32 @@ export default {
     border-radius: 50%;
     background: green;
 }
-.dynamic {
-    animation:scaleout 1.3s infinite ease-in-out;
+.dynamic-warning {
+    animation:warning 1.3s infinite ease-in-out;
 }
-@keyframes scaleout {
+.dynamic-success {
+    animation:success 1.3s infinite ease-in-out;
+}
+@keyframes warning {
     0% {
-        /* transform: scale(1.0);
-        -webkit-transform: scale(1.0); */
         box-shadow: 0 0 8px 6px #fff;
     } 
     50% {
-        box-shadow: 0 0 8px 6px #ff6633;
+        box-shadow: 0 0 8px 6px #ec2020;
     }
     100% {
-          /* transform: scale(1.2);
-          -webkit-transform: scale(1.2);
-          opacity: 1; */
-          box-shadow: 0 0 8px 6px #fff;
+        box-shadow: 0 0 8px 6px #fff;
+      }
+}
+@keyframes success {
+    0% {
+        box-shadow: 0 0 8px 6px #fff;
+    } 
+    50% {
+        box-shadow: 0 0 8px 6px #0d4f3c;
+    }
+    100% {
+        box-shadow: 0 0 8px 6px #fff;
       }
 }
 .line {

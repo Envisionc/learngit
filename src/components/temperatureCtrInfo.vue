@@ -24,12 +24,12 @@
                 <vuescroll :ops="ops">
                     <div class="timeline-box">
                         <div class="timeline-item" v-for="(item, index) in snapImages" :key="index">
-                            <img class="camera-img" v-if="item.state == 'on'" src="../assets/image/on.png" alt="">
-                            <img class="camera-img" v-if="item.state == 'off'" src="../assets/image/off.png" alt="">
+                            <img class="camera-img" v-if="item.state == 0" src="../assets/image/on.png" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)" alt="">
+                            <img class="camera-img" v-if="item.state == 1" src="../assets/image/off.png" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)" alt="">
                             <div class="line" :style="{visibility:index == (snapImages.length - 1) ? 'hidden': 'visible'}"></div>
                             <p class="date-text">{{ item.title }}</p>
-                            <p class="operator" v-if="item.state == 'on'">{{ item.operator }} (开)</p>
-                            <p class="operator" v-if="item.state == 'off'">{{ item.operator }} (关)</p>
+                            <p class="operator" v-if="item.state == 0">{{ item.operator }} (开)</p>
+                            <p class="operator" v-if="item.state == 1">{{ item.operator }} (关)</p>
                         </div>
                     </div>
                 </vuescroll>
@@ -124,37 +124,37 @@ export default {
                 {
                     title: '2019-02-14 18:25:08',
                     url: require('../assets/002.jpg'),
-                    state: 'on',
+                    state: 0,
                     operator: '张三'
                 },
                 {
                     title: '2019-02-14 18:25:08',
                     url: require('../assets/002.jpg'),
-                    state: 'off',
+                    state: 1,
                     operator: '张大大'
                 },
                 {
                     title: '2019-02-14 18:25:08',
                     url: require('../assets/002.jpg'),
-                    state: 'on',
+                    state: 0,
                     operator: '李四'
                 },
                 {
                     title: '2019-02-14 18:25:08',
                     url: require('../assets/002.jpg'),
-                    state: 'off',
+                    state: 1,
                     operator: '王五'
                 },
                 {
                     title: '2019-02-14 18:25:08',
                     url: require('../assets/002.jpg'),
-                    state: 'on',
+                    state: 0,
                     operator: '赵六'
                 },
                 {
                     title: '2019-02-14 18:25:08',
                     url: require('../assets/002.jpg'),
-                    state: 'off',
+                    state: 1,
                     operator: '刘七'
                 }
             ],
@@ -208,7 +208,28 @@ export default {
         },
         handleCurrentChange(val) {
             this.currentPage = val;
-        }
+        },
+        // 移入事件
+        scalein (index,state) {
+            if (state == 0) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.add('dynamic-success')
+            } else if (state == 1) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.add('dynamic-warning')
+            }
+            
+        },
+        // 移出事件
+        scaleout (index,state) {
+            if (state == 0) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.remove('dynamic-success')
+            } else if (state == 1) {
+                let nel = this.$refs.scaleImg[index]
+                nel.classList.remove('dynamic-warning')
+            }
+        },
     }
 }
 </script>
@@ -259,6 +280,34 @@ export default {
     width: 24px;
     height: 24px;
     display: inline-block;
+}
+.dynamic-warning {
+    animation:warning 1.3s infinite ease-in-out;
+}
+.dynamic-success {
+    animation:success 1.3s infinite ease-in-out;
+}
+@keyframes warning {
+    0% {
+        box-shadow: 0 0 8px 6px #fff;
+    } 
+    50% {
+        box-shadow: 0 0 8px 6px #ec2020;
+    }
+    100% {
+        box-shadow: 0 0 8px 6px #fff;
+      }
+}
+@keyframes success {
+    0% {
+        box-shadow: 0 0 8px 6px #fff;
+    } 
+    50% {
+        box-shadow: 0 0 8px 6px #0d4f3c;
+    }
+    100% {
+        box-shadow: 0 0 8px 6px #fff;
+      }
 }
 .line {
     width: 140px;

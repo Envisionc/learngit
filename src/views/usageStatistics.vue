@@ -1,28 +1,32 @@
 <template>
-    <div class="contanier">
-        <div class="content">
-            <div class="select-option">
-                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
-                    <el-option 
-                        v-for="item in selectList" 
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
-                    ></el-option>
-                </el-select>
-            </div>
-            <div class="tab-page">
-                <el-tabs type="border-card">
-                    <div class="tab-content">
-                        <div class="archival-statistics" id="usageStatistics"></div>
-                    </div>
-                </el-tabs>
+    <div class="wrap">
+        <topHeader />
+        <div class="contanier">
+            <div class="content">
+                <div class="select-option">
+                    <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                        <el-option 
+                            v-for="item in selectList" 
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </div>
+                <div class="tab-page">
+                    <el-tabs type="border-card">
+                        <div class="tab-content">
+                            <div class="archival-statistics" id="usageStatistics"></div>
+                        </div>
+                    </el-tabs>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import topHeader  from '@/components/public/topHeader'
 import electronicTagInfo  from '@/components/electronicTagInfo'
 // 引入基本模板
 let echarts = require('echarts/lib/echarts')
@@ -56,6 +60,7 @@ export default {
         }
     },
     components: {
+        topHeader,
         electronicTagInfo
     },
     mounted () {
@@ -148,7 +153,7 @@ export default {
 
 <style scoped>
 .contanier {
-    height: calc( 100vh - 80px );
+    height: calc( 100% - 80px );
     background: #f3f3f3;
 }
 .content {

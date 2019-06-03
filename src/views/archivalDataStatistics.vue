@@ -1,43 +1,47 @@
 <template>
-    <div class="contanier">
-        <div class="content">
-            <div class="select-option">
-                <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
-                    <el-option 
-                        v-for="item in selectList" 
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id"
-                    ></el-option>
-                </el-select>
-            </div>
-            <div class="tab-page">
-                <el-tabs type="border-card">
-                    <div class="tab-content">
-                        <el-tabs :tab-position="tabPosition" @click="event">
-                            <el-tab-pane v-for="(item,index) in fileNameList" :key="index" :label="item.name">
-                                <div class="tab-content">
-                                   <div class="archival-statistics" :id="'archivalStatistics' + index"></div>
-                                </div>
-                            </el-tab-pane>
-                        </el-tabs>
-                    </div>
-                    <el-table :data="fileCollection" style="width: 100%;margin-bottom:55px;">
-                        <el-table-column  prop="name"  label="门类名称" align="center"></el-table-column>
-                        <el-table-column  prop="archives" label="案卷数量" align="center"></el-table-column>
-                        <el-table-column  prop="fileNum"  label="文件数量" align="center"></el-table-column>
-                        <el-table-column  prop="attachmentNum"  label="附件数量" align="center"></el-table-column>
-                        <el-table-column  prop="pages"  label="页数" align="center"></el-table-column>
-                        <el-table-column  prop="fullTextNum"  label="全文数量" align="center"></el-table-column>
-                        <el-table-column  prop="fullTextCapacity"  label="全文容量" align="center"></el-table-column>
-                    </el-table>
-                </el-tabs>
+    <div class="wrap">
+        <topHeader />
+        <div class="contanier">
+            <div class="content">
+                <div class="select-option">
+                    <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
+                        <el-option 
+                            v-for="item in selectList" 
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </div>
+                <div class="tab-page">
+                    <el-tabs type="border-card">
+                        <div class="tab-content">
+                            <el-tabs :tab-position="tabPosition" @click="event">
+                                <el-tab-pane v-for="(item,index) in fileNameList" :key="index" :label="item.name">
+                                    <div class="tab-content">
+                                    <div class="archival-statistics" :id="'archivalStatistics' + index"></div>
+                                    </div>
+                                </el-tab-pane>
+                            </el-tabs>
+                        </div>
+                        <el-table :data="fileCollection" style="width: 100%;margin-bottom:55px;">
+                            <el-table-column  prop="name"  label="门类名称" align="center"></el-table-column>
+                            <el-table-column  prop="archives" label="案卷数量" align="center"></el-table-column>
+                            <el-table-column  prop="fileNum"  label="文件数量" align="center"></el-table-column>
+                            <el-table-column  prop="attachmentNum"  label="附件数量" align="center"></el-table-column>
+                            <el-table-column  prop="pages"  label="页数" align="center"></el-table-column>
+                            <el-table-column  prop="fullTextNum"  label="全文数量" align="center"></el-table-column>
+                            <el-table-column  prop="fullTextCapacity"  label="全文容量" align="center"></el-table-column>
+                        </el-table>
+                    </el-tabs>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import topHeader  from '@/components/public/topHeader'
 import electronicTagInfo  from '@/components/electronicTagInfo'
 // 引入基本模板
 let echarts = require('echarts/lib/echarts')
@@ -153,6 +157,7 @@ export default {
         }
     },
     components: {
+        topHeader,
         electronicTagInfo
     },
     mounted () {
