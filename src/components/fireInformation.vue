@@ -228,8 +228,8 @@ export default {
             this.totalCount = this.equipmentInfo.length
         },
         scaleout (index) {
-            // console.log(index)
-            // console.log(this.$refs.scaleImg[index])
+            console.log(index)
+            console.log(this.$refs.scaleImg[index])
             let nel = this.$refs.scaleImg[index]
             nel.classList.add('dynamic')
         },

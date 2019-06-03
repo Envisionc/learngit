@@ -29,7 +29,20 @@
         <div class="item have-bg">
           <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
           <h6 class="item-title">电子标签进出记录</h6>
-          <ul class="time-line-container">
+          <div class="time-rfid">
+            <ul class="list-rfid">
+              <li class="item-rfid"  v-for="(item,index) in items" :key="index">
+                  <div class="rfid-left">{{ item.tag }}</div>
+                  <div class="rfid-center">
+                      <div class="line"></div>
+                      <div class="circle in" v-if="item.status == 0" ref="circle" @mousemove="scalein(index)" @mouseout="scaleout(index)"></div>
+                      <div class="circle out" v-if="item.status == 1" ref="circle" @mousemove="scalein(index)" @mouseout="scaleout(index)"></div>
+                  </div>
+                  <div class="rfid-right">{{ item.content }}</div>
+              </li>
+            </ul>
+          </div>
+          <!-- <ul class="time-line-container">
             <li class="time-line-item" v-for="(item,index) in items" :key="index">
               <div class="time-item-tag">{{ item.tag }}</div>
               <div class="time-item-symbol">
@@ -38,7 +51,7 @@
               </div>
               <div class="time-item-content">{{ item.content }}</div>
             </li>
-          </ul>
+          </ul> -->
         </div>
         <div class="item have-bg">
           <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
@@ -68,7 +81,18 @@
             <div class="radar"></div>
           </div>
           <div class="popup-warning">
-            
+            <div class="e-loadholder">
+              <div class="m-loader">
+                <span class="e-text">
+                  <div class="equip-warning">
+                    <img class="warning-icon" src="../assets/image/jinggao.png">
+                    <div class="equip">空调</div>
+                    <div class="equip-temp">温度过高</div>
+                    <div class="create-time">2019-05-24 16:30:48</div>
+                  </div>
+                </span>
+              </div>
+            </div>
             <!-- <div class="popup-box"></div> -->
             <!-- <div class="popup-box"></div> -->
           </div>
@@ -181,6 +205,7 @@ import vuescroll from 'vuescroll';
 import HelloWorld from '@/components/HelloWorld.vue'
 // import Vuetable from '@/components/vuetable'
 import { setInterval } from 'timers';
+require('../assets/css/style.css')
 
 export default {
   name: 'home',
@@ -378,7 +403,6 @@ export default {
     // let pie2 = echarts.init(document.getElementById('pie2'))
     this.drawGauge(pie1)
     // this.drawPie(pie2)
-    // this.updateDonut(35) // 初始化百分比
     // 基于准备好的dom，初始化echarts实例
     // 饼图
     let archival = echarts.init(document.getElementById('archival'))
@@ -599,28 +623,7 @@ export default {
       //   obj.setOption(option)
       // },2000);
     },
-    updateDonut (percent) {
-      // 圆形进度
-      let offset = 0
-      let $el = this.$refs.section3
-      console.log(this.$refs)
-      let $elItem = this.$refs.section3Item
-      let $txt = this.$refs.percent
-      if (percent < 50) {
-        offset = (360 / 100) * percent
-        $el.style.webkitTransform = $el.style.msTransform = $el.style.MozTransform = 'rotate(' + offset + 'deg)'
-        $elItem.style.webkitTransform = $elItem.style.msTransform = $elItem.style.MozTransform = 'rotate(' + (180 - offset) + 'deg)'
-        $elItem.style.transtion = '1s'
-        $elItem.style.backgroundColor = '#04283c'
-      } else {
-        offset = ((360 / 100) * percent) - 180
-        $el.style.webkitTransform = $elItem.style.msTransform = $el.style.MozTransform = 'rotate(180deg)'
-        $elItem.style.webkitTransform = $elItem.style.msTransform = $elItem.style.MozTransform = 'rotate(' + offset + 'deg)'
-        $elItem.style.transtion = '1s'
-        $elItem.style.backgroundColor = '#09effb'
-      }
-      $txt.innerHTML = percent
-    },
+    // 左上角的设备状态切换
     selectEquiq(obj) {
       console.log(obj)
       this.equiqList.forEach(item => {
@@ -630,7 +633,17 @@ export default {
       this.percent = obj.enableNum/obj.equiqSum
       this.rate = (this.percent*100).toFixed(2)
       this.currEquiqSum = obj.equiqSum
-    }
+    },
+    // 电子标签进入出现阴影-移入事件
+    scalein (index) {
+      let nel = this.$refs.circle[index]
+      nel.classList.add('dynamic')
+    },
+    // 电子标签进入出现阴影-移出事件
+    scaleout (index) {
+      let nel = this.$refs.circle[index]
+      nel.classList.remove('dynamic')
+    },
   }
 }
 </script>
@@ -863,6 +876,66 @@ export default {
             overflow hidden
             white-space nowrap
             text-overflow ellipsis
+      .time-rfid
+        height 100%
+        padding 40px 30px 30px
+        display: flex;
+        justify-content center
+        align-items: center;
+        .list-rfid
+          color: #48ccd9;
+          .item-rfid
+            height: 40px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size: 12px;
+            .rfid-left
+              width 100px
+              margin-right: 10px;
+            .rfid-center
+              width: 20px;
+              height: 100%;
+              position: relative;
+              .circle
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                position: absolute;
+                top: 50%;
+                left: 0;
+                transform: translateY(-50%);
+              .out
+                background #F95304
+              .in
+                background #088542
+              .dynamic
+                animation:scaleout 1.3s infinite ease-in-out
+              @keyframes scaleout
+                0%
+                  box-shadow: 0 0 8px 6px #08172c;
+                50%
+                  box-shadow: 0 0 8px 6px #ff6633;
+                100%
+                  box-shadow: 0 0 8px 6px #08172c;
+              .line
+                height: 100%;
+                width: 2px;
+                background: #ccc
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                margin: auto;
+                z-index: -1;
+            .rfid-right
+              width 80px
+              text-align left
+              margin-left: 10px
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
       .archival-box
         padding-top 40px
         padding-left 30px
@@ -962,26 +1035,25 @@ export default {
                 background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
               }
               14.0002% {
-                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%)
               }
               25% {
-                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 56% 86%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%)
               }
               26% {
-                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 56% 86%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%)
                 opacity: 1;
               }
               100% {
-                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 63% 72%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%), radial-gradient(2vmin circle at 56% 86%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%);
+                background: radial-gradient(2vmin circle at 75% 70%, #ffffff 10%, #20ff4d 30%, rgba(255, 255, 255, 0) 100%)
                 opacity: 0;
               }
             }
       .popup-warning
-        width 200px
+        width 204px
         height 250px
-        padding 20px
         border 1px solid #197899
-        background #0b2231
+        background #222
         opacity 0.5
         position absolute
         top 28%
@@ -989,6 +1061,34 @@ export default {
         transform translateX(-50%)
         overflow hidden
         box-sizing border-box
+        .e-text
+          .equip-warning
+            width 100%
+            height 100%
+            display flex
+            flex-direction column
+            align-items center
+            font-size 12px
+            color #48ccd9 
+            .warning-icon
+              width 24px
+              height 24px
+              margin-top 10px
+            .equip
+              width 100%
+              height 20px
+              line-height 20px
+            .equip-temp
+              width 100%
+              height 20px
+              line-height 20px
+            .create-time
+              width 80px
+              height 20px
+              line-height 20px
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
         .popup-box
           float left
           width 200px
@@ -999,9 +1099,6 @@ export default {
         .popup-box:nth-of-type(2) 
           margin-right 0
     .middle-item
-      // position absolute
-      // bottom 0
-      // left 0
       height 300px
       display flex
       border 1px solid #043778
