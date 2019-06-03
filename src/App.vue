@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!-- <img class="app-bg" src="./assets/bg001.png" alt=""> -->
     <div class="v-header">
       <div class="v-title">智慧库房大数据平台</div>
       <div id="nav">
@@ -15,10 +14,7 @@
         <router-link to="/usageStatistics">利用统计</router-link>
       </div>
     </div>
-    <!-- <div class="v-content">
-      <img class="content-bg" src="./assets/warehouse_bg.jpg" alt=""> -->
-      <router-view/>
-    <!-- </div> -->
+    <router-view/>
   </div>
 </template>
 <script>
