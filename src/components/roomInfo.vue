@@ -16,14 +16,20 @@
                 <div class="right">
                     <p class="r-title">短视频</p>
                     <div class="short-video">
-                        <div class="short-video-item" v-for="(subItem,subIndex) in item.shortVideos" :key="subIndex">
+                        <div class="short-video-item" v-for="(subItem,subIndex) in item.shortVideos" :key="subIndex" @click="reviewImage(subItem.poster)">
                             <img :src="subItem.poster">
-                            <div class="playIcon">
+                            <div class="playIcon" v-if="subItem.type == 'video'">
                                 <img src="../assets/image/shipin_play.png" alt="">
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div v-if="dialogImageVisible" class="modalBox">
+            <div class="modal">
+                <img :src="currImage" class="modalImg">
+                <img src="../assets/image/quxiao.png" class="modalIcon" @click="checkDisappear">
             </div>
         </div>
     </div>
@@ -66,17 +72,32 @@ export default {
                         {
                             id: '0001',
                             poster: require('../assets/005.jpg'),    //短视频封面图
-                            cerateTime: '2019-05-29'        //短视频截取时间
+                            cerateTime: '2019-05-29',        //短视频截取时间
+                            type: "video"
                         },
                         {
                             id: '0002',
-                            poster: require('../assets/006.jpg'),    //短视频封面图
-                            cerateTime: '2019-05-30'        //短视频截取时间
+                            poster: require('../assets/006.jpg'),
+                            cerateTime: '2019-05-30',
+                            type: "video"
                         },
                         {
                             id: '0003',
-                            poster: require('../assets/007.jpg'),    //短视频封面图
-                            cerateTime: '2019-05-31'        //短视频截取时间
+                            poster: require('../assets/007.jpg'),
+                            cerateTime: '2019-05-31',
+                            type: "video"
+                        },
+                        {
+                            id: '0004',
+                            poster: require('../assets/002.jpg'),
+                            cerateTime: '2019-06-01',
+                            type: "image"
+                        },
+                        {
+                            id: '0005',
+                            poster: require('../assets/003.jpg'),
+                            cerateTime: '2019-06-01',
+                            type: "image"
                         }
                     ]
                 },
@@ -102,7 +123,18 @@ export default {
                         }
                     ]
                 }
-            ]
+            ],
+            dialogImageVisible: false,
+            currImage: ''
+        }
+    },
+    methods: {
+        reviewImage (url) {
+            this.currImage = url;
+            this.dialogImageVisible = true
+        },
+        checkDisappear () {
+            this.dialogImageVisible = false
         }
     }
 }
@@ -171,5 +203,29 @@ export default {
     width: 100%;
     height: 100%;
     display: block;
+}
+.modal{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+.modalImg{
+    width: 680px;
+    height: 420px;
+    z-index: 1001;
+    position: relative;
+    top: 134px;
+}
+.modalIcon{
+    width: 50px;
+    height: 50px;
+    position: relative;
+    top: 220px;
+    left: -363px;
+    cursor: pointer;
 }
 </style>

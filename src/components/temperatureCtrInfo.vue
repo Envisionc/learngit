@@ -24,8 +24,8 @@
                 <vuescroll :ops="ops">
                     <div class="timeline-box">
                         <div class="timeline-item" v-for="(item, index) in snapImages" :key="index">
-                            <img class="camera-img" v-if="item.state == 0" src="../assets/image/on.png" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)" alt="">
-                            <img class="camera-img" v-if="item.state == 1" src="../assets/image/off.png" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)" alt="">
+                            <img class="camera-img" v-if="item.state == 0" ref="scaleImg" src="../assets/image/on.png" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)" alt="">
+                            <img class="camera-img" v-if="item.state == 1" ref="scaleImg" src="../assets/image/off.png" @mousemove="scalein(index, item.state)" @mouseout="scaleout(index, item.state)" alt="">
                             <div class="line" :style="{visibility:index == (snapImages.length - 1) ? 'hidden': 'visible'}"></div>
                             <p class="date-text">{{ item.title }}</p>
                             <p class="operator" v-if="item.state == 0">{{ item.operator }} (开)</p>
@@ -279,6 +279,7 @@ export default {
 .camera-img {
     width: 24px;
     height: 24px;
+    border-radius: 50%;
     display: inline-block;
 }
 .dynamic-warning {
