@@ -147,7 +147,7 @@
           </div>
           <div class="middle-item">
             <div class="tempt-box-one">
-              <div id="pie1" style="width: 240px; height: 240px;"></div>
+              <!-- <div id="pie1" style="width: 240px; height: 240px;"></div> -->
               <!-- <p class="room-title">房间一</p> -->
             </div>
             <div class="tempt-box-two">
@@ -161,7 +161,7 @@
                   ></el-option>
                 </el-select>
               </div>-->
-              <div id="usingStatistical" style="width: 400px; height: 240px;"></div>
+              <div id="usingStatistical" style="width: 600px; height: 240px;"></div>
               <!-- <p class="room-title">房间二</p> -->
             </div>
           </div>
@@ -169,17 +169,37 @@
         <div class="right">
           <div class="item have-bg">
             <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-            <h6 class="item-title">实时监控</h6>
+            <h6 class="item-title">温度监控</h6>
             <div class="video-box">
               <!-- <video class="my-video" controls="controls" loop="loop">
                 <source src="../assets/test02.mp4" type="video/mp4" >
               </video>-->
-              <div id="main" class="main" style="width: 300px;height: 200px"></div>
+              <div id="main" class="main" style="width: 180px;height: 200px"></div>
+              <div class="tp-value">
+                <div class="average-tp">27.5℃</div>
+                <div class="average-tp">平均温度</div>
+                <div class="average-tp">28.5℃</div>
+                <div class="average-tp">最高温度</div>
+                <div class="average-tp">26.5℃</div>
+                <div class="average-tp">最低温度</div>
+              </div>
+              <!-- <div class="humidity" id="humidity" style="width: 180px;height: 160px"></div> -->
             </div>
           </div>
           <div class="item have-bg">
             <!-- <img class="kuang-one" src="../assets/框002.png" alt=""> -->
-            <h6 class="item-title">安防监控</h6>
+            <h6 class="item-title">湿度监控</h6>
+            <div class="video-box no-padding-left">
+              <div class="humidity" id="humidity" style="width: 180px;height: 160px"></div>
+              <div class="tp-value">
+                <div class="average-hu">45.3%</div>
+                <div class="average-hu">平均湿度</div>
+                <div class="average-hu">50.1%</div>
+                <div class="average-hu">最大值</div>
+                <div class="average-hu">40.7%</div>
+                <div class="average-hu">最小值</div>
+              </div>
+            </div>
             <!-- <ul class="item-images clearfix">
               <li class="item-image" v-for="(item, index) in imageUrls" :key="index">
                 <img class="_img" :src="item.url" :alt="'img-' + index" >
@@ -242,6 +262,8 @@
 // @ is an alias to /src
 // 引入基本模板
 let echarts = require("echarts/lib/echarts");
+import 'echarts-liquidfill/src/liquidFill.js';
+// require('echarts-liquidfill/src/liquidFill')
 // 引入柱状图组件
 require("echarts/lib/chart/bar");
 // 引入仪表盘组件
@@ -456,9 +478,9 @@ export default {
     };
   },
   mounted() {
-    let pie1 = echarts.init(document.getElementById("pie1"));
+    // let pie1 = echarts.init(document.getElementById("pie1"));
     // let pie2 = echarts.init(document.getElementById('pie2'))
-    this.drawGauge(pie1);
+    // this.drawGauge(pie1);
     // this.drawPie(pie2)
     // 基于准备好的dom，初始化echarts实例
     // 饼图
@@ -474,6 +496,9 @@ export default {
     let main = echarts.init(document.getElementById("main"));
     // this.drawThermometer(main)
     this.drawThermometer1(main);
+    // 湿度图形
+    let humidity = echarts.init(document.getElementById("humidity"));
+    this.drawHumidity(humidity)
   },
   computed: {
     dashOffset() {
@@ -521,7 +546,7 @@ export default {
         yAxis: {
           axisLine: {
             lineStyle: {
-              color: "#315070" //更改坐标轴颜色
+              color: "#48ccd9" //更改坐标轴颜色
               // color:'#fff' //更改坐标轴颜色
             }
           }
@@ -701,13 +726,13 @@ export default {
     //     drawThermometer (obj) {
 
     //       let width = 0
-    //       let TP_value = 35.4
+    //       let tpValue = 35.4
     //       let kd = []
     //       let Gradient = []
     //       let leftColor = ''
     //       let showValue = ''
     //       let boxPosition = [65, 0]
-    //       let TP_txt = ''
+    //       let tpTxt = ''
     //       // 刻度使用柱状图模拟，短设置1. 长设置3，构造一组数据
     //       for (let i = 0, len = 70; i <= len; i++) {
     //         if (i < 10 || i > 70) {
@@ -722,8 +747,8 @@ export default {
     //           }
     //         }
     //       }
-    //       if (TP_value > 20) {
-    //         TP_txt = '温度偏高'
+    //       if (tpValue > 20) {
+    //         tpTxt = '温度偏高'
     //         Gradient.push({
     //           offset: 0,
     //         color: '#93FE94'
@@ -734,8 +759,8 @@ export default {
     //           offset: 1,
     //           color: '#E01F28'
     //         })
-    //       } else if (TP_value > -20) {
-    //         TP_txt = '温度正常'
+    //       } else if (tpValue > -20) {
+    //         tpTxt = '温度正常'
     //         Gradient.push({
     //           offset: 0,
     //         color: '#93FE94'
@@ -744,22 +769,22 @@ export default {
     //           color: '#E4D225'
     //         })
     //       } else {
-    //         TP_txt = '温度偏低'
+    //         tpTxt = '温度偏低'
     //         Gradient.push({
     //           offset: 1,
     //         color: '#93FE94'
     //         })
     //       }
-    //       if (TP_value > 42) {
+    //       if (tpValue > 42) {
     //         showValue = 42
     //       } else {
-    //         if (TP_value < -40) {
+    //         if (tpValue < -40) {
     //           showValue = -40
     //         } else {
-    //           showValue = TP_value
+    //           showValue = tpValue
     //         }
     //       }
-    //       if (TP_value < -10) {
+    //       if (tpValue < -10) {
     //         boxPosition = [65, -120]
     //       }
     //       leftColor = Gradient[Gradient.length - 1].color
@@ -836,7 +861,7 @@ export default {
     //                   position: boxPosition,
     //                   width: 200,
     //                   height: 100,
-    //                   formatter: '{back| ' + TP_value + ' }{unit|°C}\n{downTxt|' + TP_txt + '}',
+    //                   formatter: '{back| ' + tpValue + ' }{unit|°C}\n{downTxt|' + tpTxt + '}',
     //                   rich: {
     //                     back: {
     //                       align: 'center',
@@ -980,16 +1005,16 @@ export default {
     //       obj.setOption(option)
     //     },
     drawThermometer1(obj) {
-      let TP_value = 35.4;
+      let tpValue = 27.5;
       let kd = [];
       let Gradient = [];
       let leftColor = "";
       let showValue = "";
       let boxPosition = [65, 0];
-      let TP_txt = "";
+      let tpTxt = "";
       // 刻度使用柱状图模拟，短设置1，长的设置3；构造一个数据
-      for (let i = 0, len = 70; i <= len; i++) {
-        if (i < 10 || i > 70) {
+      for (let i = 0, len = 110; i <= len; i++) {
+        if (i < 10 || i > 110) {
           kd.push("");
         } else {
           if ((i - 10) % 10 === 0) {
@@ -1001,11 +1026,11 @@ export default {
           }
         }
       }
-      console.log(kd, "刻度");
-      //  console.log(TP_value,"温度")
+      // console.log(kd, "刻度");
+      //  console.log(tpValue,"温度")
       //中间线的渐变色和文本内容
-      if (TP_value > 20) {
-        TP_txt = "温度偏高";
+      if (tpValue > 20) {
+        tpTxt = "温度偏高";
         Gradient.push(
           {
             offset: 0,
@@ -1020,8 +1045,8 @@ export default {
             color: "#E01F28"
           }
         );
-      } else if (TP_value > -20) {
-        TP_txt = "温度正常";
+      } else if (tpValue > -20) {
+        tpTxt = "温度正常";
         Gradient.push(
           {
             offset: 0,
@@ -1033,22 +1058,22 @@ export default {
           }
         );
       } else {
-        TP_txt = "温度偏低";
+        tpTxt = "温度偏低";
         Gradient.push({
           offset: 1,
           color: "#93FE94"
         });
       }
-      if (TP_value > 42) {
+      if (tpValue > 42) {
         showValue = 42;
       } else {
-        if (TP_value < -40) {
+        if (tpValue < -40) {
           showValue = -40;
         } else {
-          showValue = TP_value;
+          showValue = tpValue;
         }
       }
-      if (TP_value < -10) {
+      if (tpValue < -10) {
         boxPosition = [65, -120];
       }
       leftColor = Gradient[Gradient.length - 1].color;
@@ -1075,9 +1100,9 @@ export default {
           },
           {
             type: "category",
-            data: ["", "", "", "°C"],
+            data: ["", "", "", "", "°C"],
             position: "left",
-            offset: -80,
+            offset: -75,
             axisLabel: {
               fontSize: 10,
               color: "white"
@@ -1094,25 +1119,25 @@ export default {
           {
             show: false,
             min: -10,
-            max: 80,
+            max: 40,
             data: []
           },
           {
             show: false,
             min: -10,
-            max: 80,
+            max: 40,
             data: []
           },
           {
             show: false,
             min: -10,
-            max: 80,
+            max: 40,
             data: []
           },
           {
             show: false,
             min: -5,
-            max: 80
+            max: 40
           }
         ],
         series: [
@@ -1124,42 +1149,35 @@ export default {
             data: [
               {
                 value: showValue + 50,
-                label: {
-                  normal: {
-                    show: true,
-                    position: boxPosition,
-                    // backgroundColor: transparent,
-                    width: 200,
-                    height: 100,
-                    formatter:
-                      "{back| " +
-                      TP_value +
-                      " }{unit|°C}\n{downTxt|" +
-                      TP_txt +
-                      "}",
-                    rich: {
-                      back: {
-                        align: "center",
-                        lineHeight: 50,
-                        fontSize: 40,
-                        fontFamily: "digifacewide",
-                        color: leftColor
-                      },
-                      unit: {
-                        fontFamily: "微软雅黑",
-                        fontSize: 15,
-                        lineHeight: 50,
-                        color: leftColor
-                      },
-                      downTxt: {
-                        lineHeight: 50,
-                        fontSize: 25,
-                        align: "center",
-                        color: "#fff"
-                      }
-                    }
-                  }
-                }
+                // label: {
+                //   normal: {
+                //     show: true,
+                //     position: boxPosition,
+                //     height: 100,
+                //     formatter: "{back| " + tpValue +" }{unit|°C}\n{downTxt|" + tpTxt + "}",
+                //     rich: {
+                //       back: {
+                //         align: "left",
+                //         lineHeight: 20,
+                //         fontSize: 14,
+                //         fontFamily: "digifacewide",
+                //         color: leftColor
+                //       },
+                //       unit: {
+                //         fontFamily: "微软雅黑",
+                //         fontSize: 15,
+                //         lineHeight: 50,
+                //         color: leftColor
+                //       },
+                //       downTxt: {
+                //         lineHeight: 20,
+                //         fontSize: 14,
+                //         align: "left",
+                //         color: "#fff"
+                //       }
+                //     }
+                //   }
+                // }
               }
             ],
 
@@ -1255,17 +1273,17 @@ export default {
               normal: {
                 show: true,
                 position: "left",
-                distance: 10,
+                distance: 10, //文字到刻度线的距离
                 color: "white",
-                fontSize: 14,
+                fontSize: 7,
                 formatter: function(params) {
                   // console.log(params)
                   // console.log(params.dataIndex)
-                  if (params.dataIndex > 70 || params.dataIndex < 10) {
+                  if (params.dataIndex > 100 || params.dataIndex < 20) {
                     return "";
                   } else {
                     if ((params.dataIndex - 10) % 10 === 0) {
-                      return params.dataIndex - 30;
+                      return params.dataIndex - 50;
                     } else {
                       return "";
                     }
@@ -1273,7 +1291,7 @@ export default {
                 }
               }
             },
-            barGap: "-100%",
+            barGap: "100%",
             data: kd,
             barWidth: 1,
             itemStyle: {
@@ -1288,6 +1306,39 @@ export default {
       };
       // 使用刚指定的配置项和数据显示图表。
       obj.setOption(option);
+    },
+    // 湿度展示
+    drawHumidity (obj) {
+      let option = {
+        backgroundColor: 'rgba(0,0,0,0)',
+        tooltip: {
+          show: true
+        },
+        series: [
+          {
+            type: 'liquidFill',
+            name: '平均湿度',
+            data: [
+              {
+                name: 'first Data',
+                value: 0.453
+              }
+            ],
+            label: {
+              normal: {
+                textStyle: {
+                  fontSize: 8
+                },
+                formatter: '{a}\n{c}',
+              },
+            },
+            period: function (value, index) {
+              return 2000 * index + 1000;
+            }
+          }
+        ]
+      }
+      obj.setOption(option)
     },
     // 左上角的设备状态切换
     selectEquiq(obj) {
@@ -1375,6 +1426,9 @@ export default {
       height: 250px;
       box-sizing: border-box;
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       .kuang-one {
         width: 100%;
@@ -1390,13 +1444,15 @@ export default {
         top: 10px;
         left: 50%;
         transform: translateX(-50%);
+        color: #20e8fb;
       }
 
       .circle-chart {
         padding: 40px;
         padding-top: 60px;
         display: flex;
-
+        justify-content: center;
+        align-items: center;
         // margin: 0 85px 0 45px
         .donut-chart {
           z-index: 2;
@@ -1721,7 +1777,7 @@ export default {
               .line {
                 height: 100%;
                 width: 2px;
-                background: #ccc;
+                background: #0154be;
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -1745,8 +1801,8 @@ export default {
       }
 
       .archival-box {
-        padding-top: 40px;
-        padding-left: 30px;
+        // padding-top: 40px;
+        // padding-left: 30px;
         box-sizing: border-box;
       }
     }
@@ -1822,7 +1878,7 @@ export default {
           max-height: 240px;
           max-width: 240px;
           position: relative;
-          left: 50%;
+          left: 30%;
           top: 50%;
           transform: translate(-50%, -50%);
           border-radius: 50%;
@@ -1900,7 +1956,7 @@ export default {
         opacity: 0.5;
         position: absolute;
         top: 28%;
-        left: 82%;
+        left: 70%;
         transform: translateX(-50%);
         overflow: hidden;
         box-sizing: border-box;
@@ -1963,6 +2019,8 @@ export default {
       height: 300px;
       display: flex;
       border: 1px solid #043778;
+      justify-content: center
+      align-items: center
       box-sizing: border-box;
 
       .tempt-box-one {
@@ -1987,22 +2045,69 @@ export default {
     }
 
     .video-box {
-      width: 360px;
-      height: 220px;
-      padding-top: 40px;
-      padding-left: 30px;
+      // width: 360px;
+      // height: 220px;
+      // padding-top: 40px;
+      // padding-left: 45px;
+      display flex
+      justify-content: center;
+      align-items: center;
       box-sizing: border-box;
-
+      position relative
+      .main {
+        margin-left: -50%;
+      }
       .my-video {
         width: 100%;
         height: 100%;
         object-fit: fill;
       }
+      .tp-value {
+        flex: 1
+        padding-top: 30px
+        position: absolute
+        left: 40%
+        .average-tp {
+          font-size: 14px
+        }
+        .average-tp:nth-of-type(1) {
+          font-size: 18px
+        }
+        .average-tp:nth-of-type(odd) {
+          color: #fe7174
+        }
+        .average-tp:nth-of-type(even) {
+          color: #095676
+          margin-bottom: 10px
+        }
+        .average-hu {
+          font-size: 14px
+        }
+        .average-hu:nth-of-type(1) {
+          font-size: 18px
+          color: #20e8fb
+        }
+        .average-hu:nth-of-type(odd) {
+          color: #20e8fb
+        }
+        .average-hu:nth-of-type(even) {
+          color: #095676
+          margin-bottom: 10px
+        }
+      }
+      .humidity {
+        // padding-top: 20px
+        margin-left: -95%;
+      }
+    }
+    .no-padding-left {
+      padding-left: 0
     }
 
     .table-item {
       // padding-top 40px
       // padding-left 30px
+      width: 100%;
       height: 100%;
       padding: 40px 30px 30px 30px;
       box-sizing: border-box;

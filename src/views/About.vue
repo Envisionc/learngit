@@ -1,7 +1,8 @@
 <template>
     <div class="wrap">
         <topHeader />
-        <div class="contanier">
+        <div class="contanier" ref="container">
+        <!-- <div class="contanier" ref="container" :style="{width: '100%', height: divH + 'px'}"> -->
             <div class="content">
                 <div class="select-option">
                     <el-select @change="selectGet" v-model="form.region" placeholder="请选择库房">
@@ -65,12 +66,24 @@ export default {
                     id: 2,
                     name: '南一房'
                 },
-            ]
+            ],
+            divH: 0
         }
     },
     components: {
         topHeader,
         roomInfo
+    },
+    watch: {
+
+    },
+    mounted () {
+        let container = this.$refs.container
+        console.log(container, "1----")
+        this.divH = document.documentElement.clientHeight - 80
+        console.log("------2", this.divH)
+        console.log("------//--", document.documentElement  )
+        console.log("------3", container.scrollHeight  )
     },
     methods: {
         selectGet() {
@@ -85,7 +98,7 @@ export default {
 
 <style scoped>
 .contanier {
-    height: calc( 100% - 80px );
+    /* height: calc( 100% - 80px ); */
     background: #f3f3f3;
 }
 .content {
