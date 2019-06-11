@@ -1363,7 +1363,8 @@ export default {
         this.num = 0;
       }
       let obj = this.$refs.equipNo;
-      // console.log(this.equiqList[this.num])
+      // console.log(obj)
+      // console.log(this.num)
       let cEquip = this.equiqList[this.num];
       obj.forEach(item => {
         item.classList.remove("active");
