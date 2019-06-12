@@ -10,7 +10,23 @@ module.exports = {
     lintOnSave: true,
     // webpack配置
     chainWebpack: () => { },
-    configureWebpack: () => { },
+    configureWebpack: () => {},
+    // CopyWebpackPlugin = require('copy-webpack-plugin'),
+    // configureWebpack: config  => {
+    //     if (process.env.NODE_ENV === 'development') {
+    //         config.devtool = 'source-map'
+    //         // mutate config for production...
+    //     }
+    //     config.plugins.push(
+    //         new CopyWebpackPlugin([
+    //             {
+    //                 from: './static', // 新增可以被index.html访问的静态文件目录,支持多个
+    //                 to: this.outputDir,
+    //                 ignore: ['.*']
+    //             }
+    //         ])
+    //     )
+    // },
     // 生产环境是否生成 sourceMap 文件
     productionSourceMap: true,
     // css相关配置

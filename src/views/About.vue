@@ -20,7 +20,7 @@
               <div class="tab-content" v-if="index == 0">
                 <roomInfo></roomInfo>
               </div>
-              <div class="tab-content" v-if="index == 1">
+              <div class="tab-content1" v-if="index == 1">
                 <div id="ThreeJS" style="position: absolute; left: 0px; top: 0px"></div>
               </div>
               <div class="tab-content" v-if="index == 2">我是房间三</div>
@@ -35,11 +35,6 @@
 <script>
 import roomInfo from "@/components/roomInfo";
 import topHeader from "@/components/public/topHeader";
-// let THREE = require("src/assets/static/js/three.js");
-// import * as THREE from "three";
-// let OrbitControls = require("three-orbit-controls");
-// import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
-// import { CSS2DRenderer, CSS2DObject } from "three-css2drenderer";
 export default {
   data() {
     return {
@@ -80,7 +75,12 @@ export default {
       renderer: null, // 渲染器
       controls: null, //控制器
       tween: null,
-      door: null
+      door: null,
+      matArrayA: [], //内墙
+      matArrayB: [], //外墙
+      dummy: null,
+      wrap: "",
+      floorImg: require('./../assets/image/xinwen.png')
     };
   },
   components: {
@@ -95,6 +95,7 @@ export default {
     // console.log("------2", this.divH)
     // console.log("------//--", document.documentElement  )
     // console.log("------3", container.scrollHeight  )
+    this.dummy = new THREE.Object3D(); //仿制品
     this.init();
   },
   methods: {
@@ -105,20 +106,28 @@ export default {
       console.log(tab, event);
     },
     init() {
-      this.scene = new THREE.Scene();
-      console.log("hello threejs", this.scene);
-      const SCREEN_WIDTH = window.innerWidth;
-      const SCREEN_HEIGHT = window.innerHeight;
-      //var VIEW_ANGLE = 45, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.1, FAR = 20000;
-      let VIEW_ANGLE = 75;
-      const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
-      const NEAR = 0.1;
-      const FAR = 10000;
-      let materialArrayA = [];
-      let materialArrayB = [];
-      let matArrayA = []; //内墙
-      let matArrayB = []; //外墙
-      let dummy = new THREE.Object3D(); //仿制品
+      this.initScene()
+      this.initCamera()
+      this.initRender()
+      // this.initEvent()
+      this.initControls()
+      this.initLight()
+      this.initObject()
+      this.animate()
+      // this.scene = new THREE.Scene();
+      // console.log("hello threejs", this.scene);
+      // const SCREEN_WIDTH = window.innerWidth;
+      // const SCREEN_HEIGHT = window.innerHeight;
+      // const VIEW_ANGLE = 75;
+      // const ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT;
+      // const NEAR = 0.1;
+      // const FAR = 20000;
+
+      // let materialArrayA = [];
+      // let materialArrayB = [];
+      // let this.matArrayA = []; //内墙
+      // let this.matArrayB = []; //外墙
+      // let dummy = new THREE.Object3D(); //仿制品
     },
     // 初始化场景
     initScene() {
@@ -126,22 +135,25 @@ export default {
     },
     // 初始化相机
     initCamera() {
-      this.camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
-      this.camera.position.set(0, 1000, 1800);
-      this.camera.lookAt(scene.position);
+      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
+      this.camera.position.set(0, 1000,980);
+      this.camera.lookAt(this.scene.position);
       this.camera.lookAt(0, 0, 0);
-      this.scene.add(camera);
+      this.scene.add(this.camera);
     },
     // 初始化渲染器
     initRender() {
       if (Detector.webgl)
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
-      else this.renderer = new THREE.CanvasRenderer();
+      else 
+        this.renderer = new THREE.CanvasRenderer();
       //设置渲染器的大小为窗口的内宽度，也就是内容区的宽度。
-      this.renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
-      container = document.getElementById("ThreeJS");
-      container.appendChild(this.renderer.domElement);
+      this.renderer.setSize(1000, 600);
+      this.wrap = document.getElementById("ThreeJS"); //THreeJS div
+      this.wrap.appendChild(this.renderer.domElement); //生成的canvas元素
+      console.log(this.renderer.domElement, this.wrap, "123456==")
       this.renderer.setClearColor(0x4682b4, 1.0);
+      // this.renderer.render(this.scene, this.camera);
     },
     // 事件
     initEvent() {},
@@ -158,18 +170,18 @@ export default {
       // A start, 第二个参数是光源强度
       var directionalLight = new THREE.DirectionalLight(0xffffff, 1); //模拟远处类似太阳的光源
       directionalLight.position.set(0, 100, 0).normalize();
-      scene.add(directionalLight);
+      this.scene.add(directionalLight);
       //A end
       var ambient = new THREE.AmbientLight(0xffffff, 1); //AmbientLight,影响整个场景的光源
       ambient.position.set(0, 0, 0);
-      scene.add(ambient);
+      this.scene.add(ambient);
       //var pointlight = new THREE.PointLight(0x000000,1.5,2000);
       //scene.add(pointlight);
     },
     // 创建地板
     createFloor() {
       var loader = new THREE.TextureLoader();
-      loader.load("./images/floor.jpg", function(texture) {
+      loader.load("/public/static/images/floor.jpg", function(texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(10, 10);
         var floorGeometry = new THREE.BoxGeometry(1600, 1100, 1);
@@ -180,7 +192,7 @@ export default {
         var floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.position.y = -0.5;
         floor.rotation.x = Math.PI / 2;
-        scene.add(floor);
+        this.scene.add(floor);
       });
 
       //茶色：0x58ACFA   透明玻璃色：0XECF1F3
@@ -188,51 +200,51 @@ export default {
       glass_material.opacity = 0.4;
       glass_material.transparent = true;
 
-      var left_wall = returnWallObject(
+      var left_wall = this.returnWallObject(
         20,
         200,
         1100,
         0,
-        matArrayB,
+        this.matArrayB,
         -801,
         100,
         0
       );
-      var left_cube = returnWallObject(
+      var left_cube = this.returnWallObject(
         20,
         110,
         1100,
         0,
-        matArrayB,
+        this.matArrayB,
         -801,
         100,
         0
       );
-      createResultBsp(left_wall, left_cube, 1);
-      createCubeWall(1, 110, 1100, 0, glass_material, -801, 100, 0);
+      this.createResultBsp(left_wall, left_cube, 1);
+      this.createCubeWall(1, 110, 1100, 0, glass_material, -801, 100, 0);
 
-      var right_wall = returnWallObject(
+      var right_wall = this.returnWallObject(
         20,
         200,
         1100,
         1,
-        matArrayB,
+        this.matArrayB,
         801,
         100,
         0
       );
-      var right_cube = returnWallObject(
+      var right_cube = this.returnWallObject(
         20,
         110,
         1100,
         0,
-        matArrayB,
+        this.matArrayB,
         801,
         100,
         0
       );
-      createResultBsp(right_wall, right_cube, 1);
-      createCubeWall(1, 110, 1100, 0, glass_material, 801, 100, 0);
+      this.createResultBsp(right_wall, right_cube, 1);
+      this.createCubeWall(1, 110, 1100, 0, glass_material, 801, 100, 0);
     },
     //墙上挖门，通过两个几何体生成BSP对象
     createResultBsp(bsp, less_bsp, mat) {
@@ -268,7 +280,7 @@ export default {
       result.material.needsUpdate = true; //更新纹理
       result.geometry.buffersNeedUpdate = true;
       result.geometry.uvsNeedUpdate = true;
-      scene.add(result);
+      this.scene.add(result);
     },
     // 创建墙
     createCubeWall(width, height, depth, angle, material, x, y, z) {
@@ -278,10 +290,10 @@ export default {
       cube.position.y = y;
       cube.position.z = z;
       cube.rotation.y += angle * Math.PI; //-逆时针旋转,+顺时针
-      scene.add(cube);
+      this.scene.add(cube);
     },
     // 返回墙对象
-    returnWallObject() {
+    returnWallObject(width, height, depth, angle, material, x, y, z) {
       var cubeGeometry = new THREE.BoxGeometry(width, height, depth);
       var cube = new THREE.Mesh(cubeGeometry, material);
       cube.position.x = x;
@@ -291,33 +303,33 @@ export default {
       return cube;
     },
     createWallMaterail() {
-      matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //前  0xafc0ca :灰色
-      matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //后
-      matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
-      matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //下
-      matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //左    0xafc0ca :灰色
-      matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //右
+      this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //前  0xafc0ca :灰色
+      this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //后
+      this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
+      this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //下
+      this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //左    0xafc0ca :灰色
+      this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //右
 
-      matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //前  0xafc0ca :灰色
-      matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x9cb2d1 })); //后  0x9cb2d1：淡紫
-      matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
-      matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //下
-      matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //左   0xafc0ca :灰色
-      matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //右
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //前  0xafc0ca :灰色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x9cb2d1 })); //后  0x9cb2d1：淡紫
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //下
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //左   0xafc0ca :灰色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //右
     },
     createLayout() {
       // 墙面1 立方体比较长的面  左一
-      createCubeWall(10, 200, 900, 0, matArrayB, -651, 100, 0);
+      this.createCubeWall(10, 200, 900, 0, this.matArrayB, -651, 100, 0);
       // 墙面2  立方体比较长的面   右一
-      createCubeWall(10, 200, 900, 1, matArrayB, 651, 100, 0);
+      this.createCubeWall(10, 200, 900, 1, this.matArrayB, 651, 100, 0);
       // 墙面3 门对面的墙 立方体比较短的面
-      createCubeWall(10, 200, 1310, 1.5, matArrayB, 0, 100, -451);
+      this.createCubeWall(10, 200, 1310, 1.5, this.matArrayB, 0, 100, -451);
 
       // 墙面4   带门的面
-      var wall = returnWallObject(1310, 200, 10, 0, matArrayB, 0, 100, 455);
+      var wall = this.returnWallObject(1310, 200, 10, 0, this.matArrayB, 0, 100, 455);
       // 门框
-      var door_cube = returnWallObject(100, 180, 10, 0, matArrayB, 0, 90, 455);
-      createResultBsp(wall, door_cube, 1);
+      var door_cube = this.returnWallObject(100, 180, 10, 0, this.matArrayB, 0, 90, 455);
+      this.createResultBsp(wall, door_cube, 1);
 
       //为墙面安装门,右门
       var loader = new THREE.TextureLoader();
@@ -334,67 +346,68 @@ export default {
         var door1 = door.clone();
         door1.position.set(50, 0, 0);
         door1.visible = false;
-        dummy.add(door);
-        dummy.add(door1);
-        dummy.position.set(50, 90, 451);
-        scene.add(dummy);
+        this.dummy.add(door);
+        this.dummy.add(door1);
+        this.dummy.position.set(50, 90, 451);
+        this.scene.add(this.dummy);
       });
 
       // 房间A:隔墙1
-      createCubeWall(10, 200, 250, 0, matArrayA, -151, 100, 325);
+      this.createCubeWall(10, 200, 250, 0, this.matArrayA, -151, 100, 325);
       //房间A:隔墙2  无门
-      createCubeWall(10, 200, 220, 0.5, matArrayA, -256, 100, 201);
+      this.createCubeWall(10, 200, 220, 0.5, this.matArrayA, -256, 100, 201);
       // 厨房：隔墙3
-      createCubeWall(350, 200, 10, 0, matArrayA, 481, 100, 131);
+      this.createCubeWall(350, 200, 10, 0, this.matArrayA, 481, 100, 131);
       // 厨房：隔墙4 无门
-      createCubeWall(10, 200, 200, 0, matArrayA, 301, 100, 225);
+      this.createCubeWall(10, 200, 200, 0, this.matArrayA, 301, 100, 225);
       // 房间B
-      createCubeWall(350, 200, 10, 0, matArrayA, -471, 100, -50);
+      this.createCubeWall(350, 200, 10, 0, this.matArrayA, -471, 100, -50);
       //房间B  无门
-      createCubeWall(200, 200, 10, 0.5, matArrayA, 0, 100, -350);
+      this.createCubeWall(200, 200, 10, 0.5, this.matArrayA, 0, 100, -350);
       // 房间C
-      createCubeWall(220, 200, 10, 0, matArrayA, 540, 100, -50);
+      this.createCubeWall(220, 200, 10, 0, this.matArrayA, 540, 100, -50);
       //房间C 无门
-      createCubeWall(200, 200, 10, 0.5, matArrayA, 250, 100, -350);
+      this.createCubeWall(200, 200, 10, 0.5, this.matArrayA, 250, 100, -350);
       //厕所
-      var cube = returnWallObject(10, 200, 260, 0.5, matArrayA, 125, 100, -250);
+      var cube = this.returnWallObject(10, 200, 260, 0.5, this.matArrayA, 125, 100, -250);
       //厕所门框
-      var door_cube1 = returnWallObject(
+      var door_cube1 = this.returnWallObject(
         10,
         160,
         80,
         0.5,
-        matArrayA,
+        this.matArrayA,
         155,
         90,
         -250
       );
-      createResultBsp(cube, door_cube1, 2);
+      this.createResultBsp(cube, door_cube1, 2);
 
       //茶色：0x58ACFA   透明玻璃色：0XECF1F3
       var glass_material = new THREE.MeshBasicMaterial({ color: 0x58acfa });
       glass_material.opacity = 0.6;
       glass_material.transparent = true;
-      createCubeWall(1, 180, 80, 0.5, glass_material, 155, 90, -250);
+      this.createCubeWall(1, 180, 80, 0.5, glass_material, 155, 90, -250);
     },
     // 初始化OBJ对象
     initObject() {
       //墙纹理
-      createWallMaterail();
-      createFloor();
-      createLayout();
+      this.createWallMaterail()
+      this.createFloor()
+      this.createLayout()
     },
     animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
+      requestAnimationFrame(this.animate);
+      this.renderer.render(this.scene, this.camera);
       TWEEN.update();
-      update();
+      this.update();
     },
     update() {
+      var clock = new THREE.Clock();
       var delta = clock.getDelta();
       var moveDistance = 200 * delta;
       var rotateAngle = (Math.PI / 2) * delta;
-      controls.update();
+      this.controls.update();
     }
   }
 };
@@ -418,6 +431,10 @@ export default {
   background: #fff;
   margin-top: 60px;
   color: #333;
+}
+.tab-content1 {
+  height: 560px;
+  position: relative;
 }
 </style>
 
