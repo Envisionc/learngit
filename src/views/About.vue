@@ -80,7 +80,9 @@ export default {
       matArrayB: [], //外墙
       dummy: null,
       wrap: "",
-      floorImg: require('./../assets/image/xinwen.png')
+      floorImg: require('./../assets/image/floor.jpg'), // 地板
+      leftDoor: require('./../assets/image/door_left.png'), //左边的门
+      rightDoor: require('./../assets/image/door_right.png'), // 右边的门
     };
   },
   components: {
@@ -151,7 +153,6 @@ export default {
       this.renderer.setSize(1000, 600);
       this.wrap = document.getElementById("ThreeJS"); //THreeJS div
       this.wrap.appendChild(this.renderer.domElement); //生成的canvas元素
-      console.log(this.renderer.domElement, this.wrap, "123456==")
       this.renderer.setClearColor(0x4682b4, 1.0);
       // this.renderer.render(this.scene, this.camera);
     },
@@ -181,7 +182,9 @@ export default {
     // 创建地板
     createFloor() {
       var loader = new THREE.TextureLoader();
-      loader.load("/public/static/images/floor.jpg", function(texture) {
+      var publicPath = "localhost:8080"
+      var _this = this
+      loader.load(_this.floorImg, function(texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(10, 10);
         var floorGeometry = new THREE.BoxGeometry(1600, 1100, 1);
@@ -192,12 +195,12 @@ export default {
         var floor = new THREE.Mesh(floorGeometry, floorMaterial);
         floor.position.y = -0.5;
         floor.rotation.x = Math.PI / 2;
-        this.scene.add(floor);
+        _this.scene.add(floor);
       });
 
       //茶色：0x58ACFA   透明玻璃色：0XECF1F3
       var glass_material = new THREE.MeshBasicMaterial({ color: 0xecf1f3 });
-      glass_material.opacity = 0.4;
+      glass_material.opacity = 0.2;
       glass_material.transparent = true;
 
       var left_wall = this.returnWallObject(
@@ -220,6 +223,7 @@ export default {
         100,
         0
       );
+      console.log(left_wall, left_cube, "qiang")
       this.createResultBsp(left_wall, left_cube, 1);
       this.createCubeWall(1, 110, 1100, 0, glass_material, -801, 100, 0);
 
@@ -333,7 +337,8 @@ export default {
 
       //为墙面安装门,右门
       var loader = new THREE.TextureLoader();
-      loader.load("images/door_right.png", function(texture) {
+      var _this = this
+      loader.load(_this.rightDoor, function(texture) {
         var doorgeometry = new THREE.BoxGeometry(100, 180, 2);
         var doormaterial = new THREE.MeshBasicMaterial({
           map: texture,
@@ -341,15 +346,15 @@ export default {
         });
         doormaterial.opacity = 1.0;
         doormaterial.transparent = true;
-        door = new THREE.Mesh(doorgeometry, doormaterial);
-        door.position.set(-50, 0, 0);
-        var door1 = door.clone();
+        _this.door = new THREE.Mesh(doorgeometry, doormaterial);
+        _this.door.position.set(-50, 0, 0);
+        var door1 = _this.door.clone();
         door1.position.set(50, 0, 0);
         door1.visible = false;
-        this.dummy.add(door);
-        this.dummy.add(door1);
-        this.dummy.position.set(50, 90, 451);
-        this.scene.add(this.dummy);
+        _this.dummy.add(_this.door);
+        _this.dummy.add(door1);
+        _this.dummy.position.set(50, 90, 451);
+        _this.scene.add(_this.dummy);
       });
 
       // 房间A:隔墙1
