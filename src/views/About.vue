@@ -284,8 +284,8 @@ export default {
       switch (mat) {
         case 1:
           var material = new THREE.MeshPhongMaterial({
-            color: 0x9cb2d1,
-            specular: 0x9cb2d1,
+            color: 0x4c5264,
+            specular: 0x4c5264,
             shininess: 30,
             transparent: true,
             opacity: 1
@@ -370,20 +370,20 @@ export default {
     },
     createLayout() {
       // 墙面1 立方体比较长的面  左一
-      this.createCubeWall(10, 200, 900, 0, this.matArrayB, -651, 100, 0);
+      this.createCubeWall(10, 200, 1200, 0, this.matArrayB, -651, 100, -140);
       // 墙面2  立方体比较长的面   右一
-      this.createCubeWall(10, 200, 900, 1, this.matArrayB, 651, 100, 0);
+      // this.createCubeWall(10, 200, 900, 1, this.matArrayB, 651, 100, 0);
       // 墙面3 门对面的墙 立方体比较短的面
-      this.createCubeWall(10, 200, 1310, 1.5, this.matArrayB, 0, 100, -451);
+      // this.createCubeWall(10, 200, 1450, 1.5, this.matArrayB, 80, 100, -451);
 
       // 墙面4   带门的面
       var wall = this.returnWallObject(
-        1310,
+        1450,
         200,
         10,
         0,
         this.matArrayB,
-        0,
+        80,
         100,
         455
       );
