@@ -78,11 +78,12 @@ export default {
       door: null,
       matArrayA: [], //内墙
       matArrayB: [], //外墙
+      matArrayC: [], //外墙 -- 初始化视角
       dummy: null,
       wrap: "",
-      floorImg: require('./../assets/image/floor.jpg'), // 地板
-      leftDoor: require('./../assets/image/door_left.png'), //左边的门
-      rightDoor: require('./../assets/image/door_right.png'), // 右边的门
+      floorImg: require("./../assets/image/floor.jpg"), // 地板
+      leftDoor: require("./../assets/image/door_left.png"), //左边的门
+      rightDoor: require("./../assets/image/door_right.png") // 右边的门
     };
   },
   components: {
@@ -108,14 +109,14 @@ export default {
       console.log(tab, event);
     },
     init() {
-      this.initScene()
-      this.initCamera()
-      this.initRender()
+      this.initScene();
+      this.initCamera();
+      this.initRender();
       // this.initEvent()
-      this.initControls()
-      this.initLight()
-      this.initObject()
-      this.animate()
+      this.initControls();
+      this.initLight();
+      this.initObject();
+      this.animate();
       // this.scene = new THREE.Scene();
       // console.log("hello threejs", this.scene);
       // const SCREEN_WIDTH = window.innerWidth;
@@ -137,8 +138,13 @@ export default {
     },
     // 初始化相机
     initCamera() {
-      this.camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
-      this.camera.position.set(0, 1000,980);
+      this.camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        10000
+      );
+      this.camera.position.set(0, 1000, 980);
       this.camera.lookAt(this.scene.position);
       this.camera.lookAt(0, 0, 0);
       this.scene.add(this.camera);
@@ -147,8 +153,7 @@ export default {
     initRender() {
       if (Detector.webgl)
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
-      else 
-        this.renderer = new THREE.CanvasRenderer();
+      else this.renderer = new THREE.CanvasRenderer();
       //设置渲染器的大小为窗口的内宽度，也就是内容区的宽度。
       this.renderer.setSize(1000, 600);
       this.wrap = document.getElementById("ThreeJS"); //THreeJS div
@@ -182,12 +187,12 @@ export default {
     // 创建地板
     createFloor() {
       var loader = new THREE.TextureLoader();
-      var publicPath = "localhost:8080"
-      var _this = this
+      var publicPath = "localhost:8080";
+      var _this = this;
       loader.load(_this.floorImg, function(texture) {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(10, 10);
-        var floorGeometry = new THREE.BoxGeometry(1600, 1100, 1);
+        var floorGeometry = new THREE.BoxGeometry(1600, 1500, 1);
         var floorMaterial = new THREE.MeshBasicMaterial({
           map: texture,
           side: THREE.DoubleSide
@@ -202,7 +207,7 @@ export default {
       var glass_material = new THREE.MeshBasicMaterial({ color: 0xecf1f3 });
       glass_material.opacity = 0.2;
       glass_material.transparent = true;
-
+      console.log(this.matArrayB, "这个值");
       var left_wall = this.returnWallObject(
         20,
         200,
@@ -223,9 +228,9 @@ export default {
         100,
         0
       );
-      console.log(left_wall, left_cube, "qiang")
-      this.createResultBsp(left_wall, left_cube, 1);
-      this.createCubeWall(1, 110, 1100, 0, glass_material, -801, 100, 0);
+      // this.createResultBsp(left_wall, left_cube, 1);
+      // this.createCubeWall(1, 110, 1500, 0, glass_material, -801, 100, 0); //左边长的门透明部分
+      this.createCubeWall(10, 200, 1500, 0, this.matArrayB, -801, 100, 0); //左边新建的墙
 
       var right_wall = this.returnWallObject(
         20,
@@ -247,8 +252,32 @@ export default {
         100,
         0
       );
-      this.createResultBsp(right_wall, right_cube, 1);
-      this.createCubeWall(1, 110, 1100, 0, glass_material, 801, 100, 0);
+      // this.createResultBsp(right_wall, right_cube, 1); //右侧带玻璃的墙
+      // this.createCubeWall(1, 110, 1100, 0, glass_material, 801, 100, 0);
+      this.createCubeWall(10, 200, 1500, 0, this.matArrayB, 801, 100, 0);
+      var before_wall = this.returnWallObject(
+        1600,
+        200,
+        10,
+        0,
+        this.matArrayC,
+        0,
+        100,
+        745
+      );
+      var before_cube = this.returnWallObject(
+        200,
+        180,
+        20,
+        0,
+        this.matArrayC,
+        -650,
+        90,
+        745
+      );
+      this.createResultBsp(before_wall, before_cube, 1); //初始化时正前面有入口的墙
+      // this.createCubeWall(1600, 200, 10, 0, this.matArrayC, 0, 100, 745);
+      this.createCubeWall(1600, 200, 10, 0, this.matArrayC, 0, 100, -745);
     },
     //墙上挖门，通过两个几何体生成BSP对象
     createResultBsp(bsp, less_bsp, mat) {
@@ -273,11 +302,14 @@ export default {
           break;
         default:
       }
-
       var sphere1BSP = new ThreeBSP(bsp);
+      console.log(sphere1BSP, "1");
       var cube2BSP = new ThreeBSP(less_bsp); //0x9cb2d1 淡紫,0xC3C3C3 白灰 , 0xafc0ca灰
+      console.log(cube2BSP, "2");
       var resultBSP = sphere1BSP.subtract(cube2BSP);
+      console.log(resultBSP, "3");
       var result = resultBSP.toMesh(material);
+      console.log(result, "4");
       result.material.flatshading = THREE.FlatShading;
       result.geometry.computeFaceNormals(); //重新计算几何体侧面法向量
       result.geometry.computeVertexNormals();
@@ -307,6 +339,7 @@ export default {
       return cube;
     },
     createWallMaterail() {
+      // 内墙
       this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //前  0xafc0ca :灰色
       this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //后
       this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
@@ -314,12 +347,26 @@ export default {
       this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //左    0xafc0ca :灰色
       this.matArrayA.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //右
 
-      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //前  0xafc0ca :灰色
-      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x9cb2d1 })); //后  0x9cb2d1：淡紫
+      // 外墙
+      // this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x9cb2d1 })); //前  0xafc0ca :灰色
+      // this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x9cb2d1 })); //后  0x9cb2d1：淡紫
+      // 新外墙
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //前
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //后
+
       this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
       this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //下
-      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //左   0xafc0ca :灰色
-      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0xafc0ca })); //右
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //左   0xafc0ca :灰色
+      this.matArrayB.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //右
+
+      // this.matArrayC
+      this.matArrayC.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //前
+      this.matArrayC.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //后
+
+      this.matArrayC.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //上  0xd6e4ec： 偏白色
+      this.matArrayC.push(new THREE.MeshPhongMaterial({ color: 0xd6e4ec })); //下
+      this.matArrayC.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //左   0xafc0ca :灰色
+      this.matArrayC.push(new THREE.MeshPhongMaterial({ color: 0x4c5264 })); //右
     },
     createLayout() {
       // 墙面1 立方体比较长的面  左一
@@ -330,14 +377,32 @@ export default {
       this.createCubeWall(10, 200, 1310, 1.5, this.matArrayB, 0, 100, -451);
 
       // 墙面4   带门的面
-      var wall = this.returnWallObject(1310, 200, 10, 0, this.matArrayB, 0, 100, 455);
+      var wall = this.returnWallObject(
+        1310,
+        200,
+        10,
+        0,
+        this.matArrayB,
+        0,
+        100,
+        455
+      );
       // 门框
-      var door_cube = this.returnWallObject(100, 180, 10, 0, this.matArrayB, 0, 90, 455);
+      var door_cube = this.returnWallObject(
+        100,
+        180,
+        10,
+        0,
+        this.matArrayB,
+        0,
+        90,
+        455
+      );
       this.createResultBsp(wall, door_cube, 1);
 
       //为墙面安装门,右门
       var loader = new THREE.TextureLoader();
-      var _this = this
+      var _this = this;
       loader.load(_this.rightDoor, function(texture) {
         var doorgeometry = new THREE.BoxGeometry(100, 180, 2);
         var doormaterial = new THREE.MeshBasicMaterial({
@@ -374,7 +439,16 @@ export default {
       //房间C 无门
       this.createCubeWall(200, 200, 10, 0.5, this.matArrayA, 250, 100, -350);
       //厕所
-      var cube = this.returnWallObject(10, 200, 260, 0.5, this.matArrayA, 125, 100, -250);
+      var cube = this.returnWallObject(
+        10,
+        200,
+        260,
+        0.5,
+        this.matArrayA,
+        125,
+        100,
+        -250
+      );
       //厕所门框
       var door_cube1 = this.returnWallObject(
         10,
@@ -392,14 +466,14 @@ export default {
       var glass_material = new THREE.MeshBasicMaterial({ color: 0x58acfa });
       glass_material.opacity = 0.6;
       glass_material.transparent = true;
-      this.createCubeWall(1, 180, 80, 0.5, glass_material, 155, 90, -250);
+      this.createCubeWall(1, 180, 80, 0.5, glass_material, 155, 90, -250); //透明玻璃
     },
     // 初始化OBJ对象
     initObject() {
       //墙纹理
-      this.createWallMaterail()
-      this.createFloor()
-      this.createLayout()
+      this.createWallMaterail();
+      this.createFloor();
+      this.createLayout();
     },
     animate() {
       requestAnimationFrame(this.animate);
